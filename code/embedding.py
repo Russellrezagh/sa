@@ -6,12 +6,11 @@ import time
 
 import numpy as np
 import torch
-from data import ScRNASeqData
-from HGATLink import *
-from utils import (
+import torch.nn as nn
+from .data import ScRNASeqData
+from .HGATLink import DGLLayer, Decoder
+from .utils import (
     MetricLogger,
-    torch_net_info,
-    torch_total_param_num,
 )
 import logging
 
@@ -64,12 +63,9 @@ def train(args):
     optimizer = torch.optim.Adam(
         net.parameters(), lr=learning_rate
     )
-    
 
     ### training data
-    train_gt_labels = dataset.train_labels
     train_gt_ratings = dataset.train_truths
-    print('train_gt_labels', len(train_gt_labels))
     print('train_gt_ratings', len(train_gt_ratings))
 
     ### logger
@@ -79,7 +75,6 @@ def train(args):
         os.path.join(args.save_dir, "train_loss%d.csv" % args.save_id),
     )
 
-   
     best_train_mse = np.inf
     best_iter = -1
     count_loss = 0
@@ -112,7 +107,6 @@ def train(args):
         if iter_idx > 3:
             dur.append(time.time() - t0)
 
-
         if iter_idx == 1 or iter_idx % args.train_log_interval == 0:
             train_loss_logger.log(
                 iter=iter_idx,
@@ -123,19 +117,19 @@ def train(args):
                 "Iter={}, mse_loss={:.4f}, time={:.4f}".format(
                     iter_idx,
                     count_loss / iter_idx,
-                    np.average(dur),
+                    np.average(dur) if len(dur) > 0 else 0,
                 )
             )
             if (count_loss / iter_idx) < best_train_mse:
                 best_iter = iter_idx
                 best_train_mse = (count_loss / iter_idx)
                 if args.is_save:
-                    torch.save(net.state_dict(), args.emb_path + 'best_train_model_v' + '.pth')
-                np.save(args.emb_path + 'gene_embedding.npy', gene_out.cpu().detach().numpy())
-               
+                    torch.save(net.state_dict(), os.path.join(args.emb_path, 'best_train_model_v.pth'))
+                np.save(os.path.join(args.emb_path, 'gene_embedding.npy'), gene_out.cpu().detach().numpy())
 
         if iter_idx % args.train_log_interval == 0 or iter_idx == 1:
             print(logging_str)
+
     print(
         "Best Iter Idx={}, Best MSE={:.4f}".format(
             best_iter, best_train_mse
@@ -156,7 +150,7 @@ def config():
         type=int,
         help="Running device. E.g `--device 0`, if using cpu, set `--device -1`",
     )
-    parser.add_argument("--save_dir", type=str, help="The saving directory")
+    parser.add_argument("--save_dir", type=str, default="log", help="The saving directory for logs")
     parser.add_argument("--save_id", type=int, help="The saving log id")
     parser.add_argument(
         "--data_name",
@@ -169,8 +163,14 @@ def config():
         default="./dataset/mDC/TFs+1000/BL--ExpressionData.csv",
         type=str,
     )
-    parser.add_argument("--is_save", default=False, help="The saving model")
-    
+    parser.add_argument(
+        "--emb_dir",
+        default="./embeddings/",
+        type=str,
+        help="Directory to save embeddings",
+    )
+    parser.add_argument("--is_save", default=True, action="store_true", help="The saving model")
+
     parser.add_argument("--gcn_dropout", type=float, default=0.1)
     parser.add_argument("--gcn_all", type=int, default=3840)
     parser.add_argument("--d_gcn", type=int, default=256)
@@ -183,42 +183,47 @@ def config():
     parser.add_argument("--train_lr", type=float, default=0.01)
 
     parser.add_argument("--class_rating", type=int, default=15)
-    
+
     args = parser.parse_args()
     args.device = (
-        th.device(args.device) if args.device >= 0 else th.device("cpu")
+        torch.device(f"cuda:{args.device}") if torch.cuda.is_available() and args.device >= 0 else torch.device("cpu")
     )
 
-    ### configure save_fir 
-    if args.save_dir is None:
-        args.save_dir = (
-                args.data_name
-                + "_"
-                + "".join(
-            random.choices(string.ascii_uppercase + string.digits, k=2)
-        )
-        )
+    ### configure save_dir
     if args.save_id is None:
         args.save_id = np.random.randint(20)
-    args.save_dir = os.path.join("log", args.save_dir)
+
+    # Construct a unique save directory for this run
+    run_save_dir_name = args.data_name + "_" + "".join(random.choices(string.ascii_uppercase + string.digits, k=2))
+    args.save_dir = os.path.join(args.save_dir, run_save_dir_name)
+
     if not os.path.isdir(args.save_dir):
         os.makedirs(args.save_dir)
 
     return args
 
+def set_seed(seed):
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+        torch.cuda.manual_seed(seed)
+
 
 if __name__ == "__main__":
     args = config()
-    path = "./embeddings/" + args.data_name + '/'
+    set_seed(args.seed)
+
+    # Define and create the embedding path
+    path = os.path.join(args.emb_dir, args.data_name)
     args.emb_path = path
     if not os.path.exists(path):
         os.makedirs(path)
-    logging.basicConfig(filename=path + "HGATLink_train.log", level=logging.INFO)
+
+    # Configure logging
+    logging.basicConfig(filename=os.path.join(path, "HGATLink_train.log"), level=logging.INFO)
     args_dict = args.__dict__
     for k, v in args_dict.items():
         logging.info("{}: {}".format(k, v))
-    np.random.seed(args.seed)
-    th.manual_seed(args.seed)
-    th.cuda.manual_seed_all(args.seed)
-    torch.cuda.manual_seed(args.seed)
+
     train(args)

@@ -4,10 +4,10 @@ import numpy as np
 import os
 import pandas as pd
 import scipy.sparse as sp
-import torch as th
-import collections
+import torch
+from collections import Counter
 
-from utils import to_etype_name
+from .utils import to_etype_name
 
 
 class ScRNASeqData:
@@ -24,11 +24,8 @@ class ScRNASeqData:
         self._device = device
         self.rank_all = rank_all
 
-  
-
-        
         data = pd.read_csv(path, header='infer', index_col=0)
-            
+
         assert np.unique(data.index).shape[0] == data.shape[0]
         assert np.unique(data.columns).shape[0] == data.shape[1]
         #Mapping expression values to levels 1-15
@@ -45,9 +42,6 @@ class ScRNASeqData:
             self.train_rating_info["rating"].values
         )
 
-       
-
-       
         self.global_gene_id_map = {
             ele: i for i, ele in enumerate(range(num_gene))
         }
@@ -83,7 +77,7 @@ class ScRNASeqData:
         print(len(train_rating_values))
         #Returns the index position of level on a scale of 1-15
         def _make_labels(ratings):
-            labels = th.LongTensor(
+            labels = torch.LongTensor(
                 np.searchsorted(self.possible_rating_values, ratings)
             ).to(device)
             return labels
@@ -91,13 +85,12 @@ class ScRNASeqData:
         self.train_enc_graph = self._generate_enc_graph(
             train_rating_pairs, train_rating_values, add_support=True
         )
-        
 
         self.train_dec_graph = self._generate_dec_graph(train_rating_pairs)
 
         self.train_labels = _make_labels(train_rating_values)
 
-        self.train_truths = th.FloatTensor(rpkm_train_rating_values).to(device)
+        self.train_truths = torch.FloatTensor(rpkm_train_rating_values).to(device)
 
         def _npairs(graph):
             rst = 0
@@ -106,11 +99,7 @@ class ScRNASeqData:
                 rst += graph.num_edges(str(r))
             return rst
 
-        
-
     def build_bin_normalized_matrix(self, data):
-
-        
         class_num = self.rank_all
 
         num_gene = data.shape[0]
@@ -118,7 +107,7 @@ class ScRNASeqData:
         data = data.T
 
         gene_name = list(data)
-       
+
         new_data = pd.DataFrame()
         new_data.index = data.index
         new_data_rpkm = pd.DataFrame()
@@ -161,18 +150,16 @@ class ScRNASeqData:
 
             temp = temp + 1
             temp = temp * mask_zero
-          
+
             new_data_dict[gene] = temp
             new_data_rpkm_dict[gene] = rpkm_temp
 
         new_data = pd.DataFrame(new_data_dict)
-        new_data = th.tensor(new_data.T.values, dtype=th.float32)
+        new_data = torch.tensor(new_data.T.values, dtype=torch.float32)
         new_data_rpkm = pd.DataFrame(new_data_rpkm_dict)
         # print(new_data_rpkm)
-        new_data_rpkm = th.tensor(new_data_rpkm.T.values, dtype=th.float32)
+        new_data_rpkm = torch.tensor(new_data_rpkm.T.values, dtype=torch.float32)
 
-        from collections import Counter
-       
         # new_data to pairs (gene,cell,rating)
         gene, cell = np.where(new_data != 0)
         #level value
@@ -196,13 +183,12 @@ class ScRNASeqData:
         for i, geneName in enumerate(rpkm.columns):
             geneName_to_id[geneName] = i
 
-       
         data_values = rpkm.values
-       
+
         zero_index = np.where(data_values == 0)
         mask = np.ones_like(data_values)
         mask[zero_index] = 0
-        mask = th.tensor(mask.T, dtype=th.float32)
+        mask = torch.tensor(mask.T, dtype=torch.float32)
 
         #
         means = []
@@ -232,9 +218,9 @@ class ScRNASeqData:
         data_values = np.minimum(data_values, 20)
         input_feature = data_values.T
 
-        rpkm_feature = th.tensor(input_feature, dtype=th.float32)
+        rpkm_feature = torch.tensor(input_feature, dtype=torch.float32)
         rpkm_feature = rpkm_feature * mask
-        
+
         # new_data to pairs (gene,cell,rating)
         gene, cell = np.where(mask != 0)  # np.where(rpkm_feature != 0)
         cell_idx = cell + rpkm_feature.shape[0]
@@ -242,7 +228,7 @@ class ScRNASeqData:
         enc_gene_cell_g = dgl.graph((np.concatenate([gene, cell_idx]), np.concatenate([cell_idx, gene])))
         #gene->cell
         dec_gene_cell_g = dgl.graph((gene, cell_idx))
-        
+
         rating = rpkm_feature[gene, cell]
         pairs = np.stack([gene, cell, rating], axis=1)
         pd_pairs = pd.DataFrame(pairs, columns=['gene_id', 'cell_id', 'rating'])
@@ -272,7 +258,7 @@ class ScRNASeqData:
     def _generate_enc_graph(
             self, rating_pairs, rating_values, add_support=False
     ):
-        
+
         gene_cell_R = np.zeros(
             (self._num_gene, self._num_cell), dtype=np.float32
         )
@@ -281,7 +267,7 @@ class ScRNASeqData:
         data_dict = dict()
         num_nodes_dict = {"gene": self._num_gene, "cell": self._num_cell}
         rating_row, rating_col = rating_pairs
-        
+
         for rating in self.possible_rating_values:
             # if rating < len(self.possible_rating_values) - 1:
             ridx = np.where(rating_values == rating)
@@ -308,7 +294,7 @@ class ScRNASeqData:
             def _calc_norm(x):
                 x = x.numpy().astype("float32")
                 x[x == 0.0] = np.inf
-                x = th.FloatTensor(1.0 / np.sqrt(x))
+                x = torch.FloatTensor(1.0 / np.sqrt(x))
                 return x.unsqueeze(1)
 
             gene_ci = []
@@ -373,8 +359,8 @@ class GeneData:
         self.save = save
 
         self.df = pd.read_csv(rpkm_path, header='infer', index_col=0)
-         
-            
+
+
         self.origin_data = self.df.values
 
         self.df.columns = self.df.columns.astype(str)
@@ -436,7 +422,7 @@ class GeneData:
                 self.key_list.append(key)
             else:
                 if label == 2:
-                   
+
                     pass
                 else:
                     self.HNS_list[key] = int(label)
@@ -444,7 +430,7 @@ class GeneData:
         s.close()
         print(len(self.key_list))
         print(len(self.HNS_list.keys()))
-       
+
 
     def getTrainTest(self, TF_num):
 
@@ -460,12 +446,12 @@ class GeneData:
 
         print(index_start_list)
         print(index_end_list)
-        
+
         pos_len = 0
-     
+
         for i in range(TF_num):
             name = self.data_name + '_representation/'
-            
+
             if self.save:
                 x_data = np.load(name + str(i) + '_xdata.npy')
                 h_data = np.load(name + str(i) + '_hdata.npy')
@@ -496,7 +482,7 @@ class GeneData:
                 gene2 = gene2.upper()
                 if int(label) != 2:
                     this_key_datas.append([gene1.lower(), gene2.lower(), label])
-                 
+
                     if not self.gene_to_name:
                         gene1_idx = self.gene_to_idx[gene1]
                         gene2_idx = self.gene_to_idx[gene2]
@@ -512,14 +498,11 @@ class GeneData:
                     gene1_emb = np.expand_dims(gene1_emb, axis=0)
                     gene2_emb = np.expand_dims(gene2_emb, axis=0)
 
-                    
-
                     gene_emb = np.concatenate((gene1_emb, gene2_emb), axis=0)
                     this_datas.append(gene_emb)
 
                     this_labels.append(label)
             pos_len += len(this_datas)
-            
 
             this_datas = np.asarray(this_datas)
 
@@ -538,6 +521,3 @@ class GeneData:
             self.datas.append(this_datas)
             self.labels.append(this_labels)
             self.gene_key_datas.append(this_key_datas)
- 
-
-   

@@ -5,7 +5,7 @@ import torch as th
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
-from utils import to_etype_name
+from .utils import to_etype_name
 import math
 from torch_geometric.utils import softmax
 import matplotlib.pyplot as plt

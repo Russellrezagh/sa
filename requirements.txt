@@ -5,5 +5,4 @@ pandas
 scipy
 scikit-learn
 torch
-collections
 torch_geometric

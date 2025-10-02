@@ -6,9 +6,9 @@ from sklearn.model_selection import train_test_split, KFold
 import pandas as pd
 import random
 import time
-from HGATLink import LinearNet
+from .HGATLink import LinearNet
 import os
-from data import GeneData
+from .data import GeneData
 import argparse
 
 
@@ -23,14 +23,11 @@ def set_seed(seed_num):
     os.environ['PYTHONHASHSEED'] = str(seed_num)
 
 
-set_seed(114514)
-
-
 def config():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--device",
-        default="1",
+        default="0",
         type=int,
         help="Running device. E.g `--device 0`, if using cpu, set `--device -1`",
     )
@@ -49,15 +46,26 @@ def config():
         "--label_path",
         default="./dataset/mDC/TFs+1000/mDC1000shuffled_output.txt",
         type=str,
-        
+
     )
     parser.add_argument(
         "--divide_path",
         default="./dataset/mDC/TFs+1000/mDC1000_divide.txt",
         type=str,
         help="Custom Interval",
-    ) 
-
+    )
+    parser.add_argument(
+        "--gene_emb_dir",
+        default="./embeddings/",
+        type=str,
+        help="Directory for gene embeddings",
+    )
+    parser.add_argument(
+        "--results_dir",
+        default="./results/",
+        type=str,
+        help="Directory for results",
+    )
     parser.add_argument(
         "--TF_num",
         default=11,
@@ -73,32 +81,31 @@ def config():
     parser.add_argument("--TF_random", default=False, action="store_true")
     args = parser.parse_args()
     args.device = (
-        torch.device(args.device) if args.device >= 0 else torch.device("cpu")
+        torch.device(f"cuda:{args.device}") if torch.cuda.is_available() and args.device >= 0 else torch.device("cpu")
     )
 
     return args
 
 
-device = "cuda:1"
-
-
-def main():
+def main(args):
+    set_seed(114514)
+    device = args.device
     TF_num = args.TF_num
     dataset_name = args.dataset_name
-    save_dir = './results/' + dataset_name + '/'
+    save_dir = args.results_dir + dataset_name + '/'
 
     e = GeneData(args.expression_path,
                  args.label_path,
                  args.divide_path,
                  TF_num=args.TF_num,
-                 gene_emb_path='./embeddings/' + dataset_name + '/gene_embedding.npy',
+                 gene_emb_path=args.gene_emb_dir + dataset_name + '/gene_embedding.npy',
                  gene_list_path=args.gene_list_path,
                  data_name=args.dataset_name, TF_random=args.TF_random)
 
 
 
     # three-fold cross validation
-      
+
     acc_memory = []
     auc_memory = []
     ap_memory = []
@@ -114,7 +121,7 @@ def main():
         count_set = [0]
         count_setx = 0
         test_index = fold
- 
+
         test_TF = [i for i in range(int(np.ceil((test_index - 1) * 0.333333 * TF_num)),
                                     int(np.ceil(test_index * 0.333333 * TF_num)))]
         if args.is_time:
@@ -122,10 +129,10 @@ def main():
         fold_path = save_dir + str(test_TF) + '/'
         if not os.path.exists(fold_path):
             os.makedirs(fold_path)
- 
+
         train_TF = [j for j in range(TF_num) if j not in test_TF]
         print("test_TF", test_TF)
- 
+
         train_emb_datas = []
         train_labels = []
         for j in train_TF:
@@ -133,13 +140,13 @@ def main():
             train_labels.append(e.labels[j])
         train_emb_datas = np.concatenate(train_emb_datas, axis=0)
         train_labels = np.concatenate(train_labels, axis=0)
- 
+
         train_emb_datas, val_emb_datas, train_labels, val_labels = \
             train_test_split(train_emb_datas,
                              train_labels,
                              test_size=0.2,
                              random_state=42)
- 
+
         test_emb_datas = []
         test_labels = []
         z = [0]
@@ -153,60 +160,60 @@ def main():
         z_memory.append(z)
         test_emb_datas = np.concatenate(test_emb_datas, axis=0)
         test_labels = np.concatenate(test_labels, axis=0)
- 
- 
+
+
         train_loader = torch.utils.data.DataLoader(
             torch.utils.data.TensorDataset(torch.from_numpy(train_emb_datas).float(),
                                            torch.from_numpy(train_labels).float()),
-            batch_size=512, shuffle=True, num_workers=14, pin_memory=True)
- 
+            batch_size=512, shuffle=True, num_workers=0, pin_memory=True)
+
         val_loader = torch.utils.data.DataLoader(
             torch.utils.data.TensorDataset(torch.from_numpy(val_emb_datas).float(),
                                            torch.from_numpy(val_labels).float()),
-            batch_size=512, shuffle=False, num_workers=14)
- 
+            batch_size=512, shuffle=False, num_workers=0)
+
         test_loader = torch.utils.data.DataLoader(
             torch.utils.data.TensorDataset(torch.from_numpy(test_emb_datas).float(),
                                            torch.from_numpy(test_labels).float()),
-            batch_size=512, shuffle=False, num_workers=14)
- 
+            batch_size=512, shuffle=False, num_workers=0)
+
         model = LinearNet().to(device)
         test_model = LinearNet().to(device)
- 
+
         optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-6)
         criterion = nn.BCEWithLogitsLoss()
         val_acc_best = 0.0
         model_weight_best = None
         early_stop = 0
         stop_num = 10
- 
+
         for epoch in range(epochs):
             model.train()
             train_acc_sum = 0.0
             train_loss = 0.0
- 
+
             for batch_idx, (emb_data, target) in enumerate(train_loader):
                 emb_data = emb_data.to(device)
                 target = target.to(device)
- 
+
                 optimizer.zero_grad()
                 output = model(emb_data)
                 output = output.squeeze()
- 
+
                 loss = criterion(output, target)
- 
+
                 loss.backward()
                 optimizer.step()
- 
+
                 train_loss += loss.item()
- 
+
                 pred = torch.where(output > 0.5, torch.ones_like(output), torch.zeros_like(output))
- 
+
                 train_acc_sum += (pred == target).sum().item()
             # scheduler.step()
             train_acc = train_acc_sum / len(train_loader.dataset)
             train_loss = train_loss / len(train_loader)
- 
+
             model.eval()
             val_acc_sum = 0.0
             val_loss = 0.0
@@ -216,22 +223,22 @@ def main():
                 for batch_idx, (emb_data, target) in enumerate(val_loader):
                     emb_data = emb_data.to(device)
                     target = target.to(device).squeeze()
- 
+
                     output = model(emb_data)
                     output = output.squeeze()
                     loss = criterion(output, target)
- 
+
                     val_loss += loss.item()
                     pred = torch.where(output > 0.5, torch.ones_like(output), torch.zeros_like(output))
- 
+
                     pre.extend(output.cpu().numpy())
                     label.extend(target.cpu().numpy())
- 
+
                     val_acc_sum += (pred == target).sum().item()
- 
+
             val_acc = val_acc_sum / len(val_loader.dataset)
             val_loss = val_loss / len(val_loader)
- 
+
             one_hot_label = label
             val_auc = roc_auc_score(one_hot_label, pre)
             precision, recall, thresholds = precision_recall_curve(one_hot_label, pre, pos_label=1)
@@ -242,14 +249,14 @@ def main():
                 early_stop = 0
             else:
                 early_stop += 1
- 
+
             print('Epoch: {}, Train Loss: {:.4f},Train Acc: {:.4f}, '
                   'Val Loss: {:.4f}, Val Acc: {:.4f}, Val AUC: {:.4f}, Val AP: {:.4f}'.format(
                 epoch, train_loss, train_acc, val_loss, val_acc, val_auc, val_ap
             ))
             if early_stop > stop_num:
                 break
- 
+
         # test
         # save model weight
         torch.save(model_weight_best, fold_path + 'model_weight_best.pth')
@@ -263,25 +270,25 @@ def main():
             for batch_idx, (emb_data, target) in enumerate(test_loader):
                 emb_data = emb_data.to(device)
                 target = target.to(device).squeeze()
- 
+
                 output = test_model(emb_data)
                 output = output.squeeze()
                 loss = criterion(output, target)
- 
+
                 test_loss += loss.item()
                 pred = torch.where(output > 0.5, torch.ones_like(output), torch.zeros_like(output))
                 pre.extend(output.cpu().numpy())
                 label.extend(target.cpu().numpy())
- 
+
                 test_acc_sum += (pred == target).sum().item()
         test_acc = test_acc_sum / len(test_loader.dataset)
         test_loss = test_loss / len(test_loader)
- 
+
         one_hot_label = label
         test_auc = roc_auc_score(one_hot_label, pre)
         precision, recall, thresholds = precision_recall_curve(one_hot_label, pre, pos_label=1)
         test_ap = auc(recall, precision)
- 
+
         pre_memory.extend(pre)
         label_memory.extend(label)
         y_test_predict.append(pre)
@@ -289,7 +296,7 @@ def main():
         acc_memory.append(test_acc)
         auc_memory.append(test_auc)
         ap_memory.append(test_ap)
- 
+
         np.save(fold_path + 'end_y_predict.npy', np.asarray(pre))
         np.save(fold_path + 'end_y_test.npy', np.asarray(label))
         print('Test Loss: {:.4f}, Test Acc: {:.4f}, Test AUC: {:.4f}, Test AP: {:.4f}'.format(
@@ -297,11 +304,11 @@ def main():
         ))
     one_hot_label_all = label_memory
     final_auc = roc_auc_score(one_hot_label_all, pre_memory)
- 
+
     precision, recall, thresholds = precision_recall_curve(one_hot_label_all, pre_memory, pos_label=1)
     final_ap = auc(recall, precision)
     pre_memory = np.where(np.asarray(pre_memory) > 0.5, 1, 0)
- 
+
     final_acc = accuracy_score(label_memory, pre_memory)
     auc_index_all = []
     ap_index_all = []
@@ -334,10 +341,10 @@ def main():
     print('Test Acc: {:.4f}, Test AUC: {:.4f}, Test AP: {:.4f}'.format(np.mean(test_acc_all), np.mean(test_auc_all),
                                                                        np.mean(test_ap_all)))
     print('Cost Time: {:.4f} s'.format(time.time() - start_time))
-    
+
 
 
 if __name__ == '__main__':
     args = config()
     print(args)
-    main()
+    main(args)
