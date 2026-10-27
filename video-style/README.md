@@ -20,17 +20,18 @@ A house style, an asset library and a deterministic render kit, built by analysi
 | [`assets/ASSETS.md`](assets/ASSETS.md) | How assets are structured, created, versioned and frozen. |
 | `assets/**/asset.json` | The library: motif, character, icons, textures, fonts, sounds (19 assets). |
 | `assets.lock.json` | sha256 of every asset file: the determinism contract. |
-| `storyboards/*.yaml` | Videos, described as data. `give-it-a-thread.yaml` is the worked example. |
+| `storyboards/*.yaml` | Videos, described as data. `give-it-a-thread.yaml` is the single-narrator example; `the-thread-dialogue.yaml` is the **guide + learner dialogue** example (its `.timed.yaml` is generated). |
 | `kit/` | Remotion 4 render kit: components that read *only* tokens, assets and storyboards. |
 | `golden/` | Perceptual signatures of key frames, used for regression and determinism checks. |
-| `tools/` | `lint_storyboard.py`, `asset_lock.py`, `gen_audio.py`, `analyze_reference.py`, `contact_sheet.sh`. |
+| `tools/` | `lint_storyboard.py`, `asset_lock.py`, `dialogue.py` (voices and times two-speaker scripts), `master.py` (loudness), `gen_audio.py`, `analyze_reference.py`, `contact_sheet.sh`. |
 | `docs/` | Rendered asset sheet, demo video and demo contact sheet. |
 
 ## Pipeline
 
 ```
-brief → motif.meaning + concepts → script (HOOK DEFINE LADDER TURN RULE RETURN)
-      → storyboards/<id>.yaml ──lint_storyboard.py──▶ errors? fix
+brief → motif.meaning + concepts → dialogue script (guide + learner; HOOK DEFINE LADDER TURN RULE RETURN)
+      → tools/dialogue.py (voice each line once, freeze, time captions to the audio)
+      → storyboards/<id>.timed.yaml ──lint_storyboard.py──▶ errors? fix
       → assets resolved (asset_lock.py --check) ──missing? create once, freeze, lock
       → --emit kit/src/storyboards/<id>.json → Remotion render → contact sheet + golden check → review
 ```
@@ -38,12 +39,14 @@ brief → motif.meaning + concepts → script (HOOK DEFINE LADDER TURN RULE RETU
 ## Quick start
 
 ```bash
-pip install pyyaml jsonschema numpy soundfile pyloudnorm           # tools
+pip install pyyaml jsonschema numpy soundfile pyloudnorm piper-tts # tools (piper only for dialogue)
 python3 -I video-style/tools/lint_storyboard.py video-style/storyboards/give-it-a-thread.yaml \
         --emit video-style/kit/src/storyboards/give-it-a-thread.json
 cd video-style/kit && npm ci
 npx remotion studio                                                 # preview
-npx remotion render MaiDemo out/mai-demo.mp4                        # render
+npx remotion render MaiDemo out/mai-demo.mp4                        # render (single narrator, no VO)
+npx remotion render MaiDialogue out/mai-dialogue.mp4                # render the two-voice dialogue demo
+python3 -I ../tools/master.py out/mai-dialogue.mp4                  # master to -14 LUFS
 node scripts/golden.mjs                                             # regression/determinism check
 ```
 In sandboxes without Remotion's own Chrome, set `--browser-executable=…/chrome-headless-shell` (CLI) or `REMOTION_BROWSER=…` (golden script).

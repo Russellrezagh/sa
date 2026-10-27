@@ -86,7 +86,10 @@ const tmp = join(tmpdir(), `mai-golden-${process.pid}`);
 mkdirSync(tmp, {recursive: true});
 mkdirSync(goldenDir, {recursive: true});
 
-const boards = {MaiDemo: JSON.parse(readFileSync(join(kit, 'src/storyboards/give-it-a-thread.json'), 'utf8'))};
+const boards = {
+	MaiDemo: JSON.parse(readFileSync(join(kit, 'src/storyboards/give-it-a-thread.json'), 'utf8')),
+	MaiDialogue: JSON.parse(readFileSync(join(kit, 'src/storyboards/the-thread-dialogue.json'), 'utf8')),
+};
 const targets = [['AssetSheetPaper', [0]], ['AssetSheetNight', [0]]];
 for (const [id, board] of Object.entries(boards)) {
 	const frames = board.beats.flatMap((b) => b.scenes).map((s) => s.from + Math.floor(s.frames / 2));

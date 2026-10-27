@@ -62,6 +62,10 @@
       "breadcrumb": {
         "$type": "dimension",
         "$value": "30px"
+      },
+      "caption-learner": {
+        "$type": "dimension",
+        "$value": "68px"
       }
     },
     "style": {
@@ -114,6 +118,14 @@
         "lineHeight": 1.0,
         "letterSpacing": "0",
         "decoration": "line-through"
+      },
+      "caption-learner": {
+        "family": "display",
+        "style": "normal",
+        "weight": 400,
+        "lineHeight": 1.08,
+        "letterSpacing": "-0.005em",
+        "$description": "Learner lines: upright roman in ink. Guide lines use 'caption' (italic, caption-base). From the POE reel's two-voice typesetting."
       }
     },
     "rules": {
@@ -134,6 +146,12 @@
         "$type": "number",
         "$value": 4
       }
+    },
+    "turn-marker": {
+      "glyph": "•",
+      "role": "emph",
+      "scale": 0.7,
+      "$description": "Prefixes the first card of each new guide turn."
     }
   }
 }

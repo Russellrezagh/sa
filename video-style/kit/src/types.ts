@@ -5,7 +5,11 @@ import type {Format, Mode, Role} from './tokens';
 export type MotifState = 'home' | 'travel' | 'underline' | 'knot' | 'pulse' | 'carry' | 'strip' | 'absent';
 export type TransitionType = 'morph' | 'carry' | 'push' | 'draw-through' | 'zoom-through' | 'wash' | 'cut' | 'end-loop';
 
-export type Caption = {text: string; at: number; until: number; emph?: Array<{word: string; role: Role}>};
+export type Caption = {text: string; at: number; until: number; emph?: Array<{word: string; role: Role}>; speaker?: string; turn?: boolean};
+
+export type Line = {speaker: string; text: string; at: number; until: number; audio?: string};
+export type CastState = {pose?: string; x?: number; y?: number; scale?: number};
+export type Speaker = {id: string; role: 'guide' | 'learner'; name?: string; voice: string; character?: string};
 
 export type Element = {
 	id: string;
@@ -29,7 +33,9 @@ export type Scene = {
 	layout: string;
 	header?: string;
 	breadcrumb?: string[];
-	vo: string;
+	vo?: string;
+	lines?: Line[];
+	cast?: Record<string, CastState>;
 	first_change?: number;
 	captions: Caption[];
 	elements?: Element[];
@@ -54,6 +60,7 @@ export type Board = {
 		voice: {register: string; asset?: string};
 		pulse: {bpm: number; asset: string};
 		fonts?: string[];
+		dialogue?: {mode: 'curious' | 'socratic'; speakers: Speaker[]};
 		total_frames: number;
 	};
 	motif: {asset: string; meaning: string};

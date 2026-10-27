@@ -46,6 +46,11 @@
         "$type": "number",
         "$value": 15,
         "$description": "Something must visibly change within 0.5 s."
+      },
+      "scene-max-dialogue": {
+        "$type": "number",
+        "$value": 210,
+        "$description": "Two-voice scenes run longer; N4 (a visible change every ≤ 2.5 s) still applies."
       }
     },
     "ease": {
@@ -202,6 +207,27 @@
         "frames": 18,
         "ease": "exit",
         "use": "Last scene only: fade stage and captions so the final frame matches the hook's first frame (seamless loop)."
+      }
+    },
+    "dialogue": {
+      "$description": "Who is speaking must be visible without reading: the learner bobs, the guide's thread swells.",
+      "talk-bob-px": {
+        "$type": "number",
+        "$value": 5,
+        "$description": "At 1080 px width; stepped on twos."
+      },
+      "talk-bob-hz": {
+        "$type": "number",
+        "$value": 3.5
+      },
+      "thread-swell": {
+        "$type": "number",
+        "$value": 0.35,
+        "$description": "Thread width × (1 + swell) while the guide speaks."
+      },
+      "speak-ramp-frames": {
+        "$type": "number",
+        "$value": 5
       }
     }
   }

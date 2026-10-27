@@ -2,27 +2,68 @@
   "$description": "Audio targets. The 'pulse' is the sonic mài: a barely-noticed rhythmic bed that the whole edit is timed to (inspired by the ticking watch under Dunkirk's score).",
   "audio": {
     "loudness": {
-      "integrated-lufs": { "$type": "number", "$value": -14 },
-      "true-peak-dbtp":  { "$type": "number", "$value": -1 },
-      "vo-over-bed-lu":  { "$type": "number", "$value": 18, "$description": "Bed sits ~18 LU under VO." }
+      "integrated-lufs": {
+        "$type": "number",
+        "$value": -14
+      },
+      "true-peak-dbtp": {
+        "$type": "number",
+        "$value": -1
+      },
+      "vo-over-bed-lu": {
+        "$type": "number",
+        "$value": 18,
+        "$description": "Bed sits ~18 LU under VO."
+      }
     },
     "voice": {
-      "wpm-contemplative": { "min": 115, "max": 140 },
-      "wpm-explainer":     { "min": 160, "max": 185 },
+      "wpm-contemplative": {
+        "min": 115,
+        "max": 140
+      },
+      "wpm-explainer": {
+        "min": 160,
+        "max": 185
+      },
       "wpm-hard-max": 200,
       "pause-after-question-s": 0.6
     },
     "pulse": {
-      "bpm": { "min": 60, "max": 80 },
-      "sources": ["tick", "heartbeat", "pencil-tap", "clock"],
+      "bpm": {
+        "min": 60,
+        "max": 80
+      },
+      "sources": [
+        "tick",
+        "heartbeat",
+        "pencil-tap",
+        "clock"
+      ],
       "rule": "Cut points and caption onsets land on pulse subdivisions (1/2 or 1/4 beat)."
     },
     "sfx": {
-      "draw":   "pencil scratch, very short, -24 LUFS",
-      "pop":    "paper tap / soft click",
+      "draw": "pencil scratch, very short, -24 LUFS",
+      "pop": "paper tap / soft click",
       "ripple": "glassy sine ping, 880-1320 Hz",
-      "strip":  "each removed layer = audible drop-out, not a fade",
-      "cut":    "only with a sound hit"
+      "strip": "each removed layer = audible drop-out, not a fade",
+      "cut": "only with a sound hit"
+    },
+    "dialogue": {
+      "$description": "Two-voice conversation (guide leads, learner asks). Timings in seconds.",
+      "gap-same-speaker-s": 0.15,
+      "gap-turn-s": 0.3,
+      "extra-after-question-s": 0.3,
+      "scene-lead-in-s": 0.2,
+      "scene-tail-s": 0.45,
+      "vo-lufs": -16,
+      "guide-share": {
+        "min": 0.55,
+        "max": 0.8
+      },
+      "learner-line-max-words": 12,
+      "guide-line-max-words": 24,
+      "max-consecutive-same-speaker": 3,
+      "casting": "Contrast timbre AND accent/pitch so voices are told apart in under a second (e.g. low US male guide + bright UK female learner). Never two similar voices."
     }
   }
 }

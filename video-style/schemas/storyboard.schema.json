@@ -3,135 +3,585 @@
   "$id": "mai/storyboard.schema.json",
   "title": "MAI Storyboard (storyboards/*.yaml)",
   "type": "object",
-  "required": ["meta", "motif", "concepts", "beats"],
+  "required": [
+    "meta",
+    "motif",
+    "concepts",
+    "beats"
+  ],
   "additionalProperties": false,
   "$defs": {
-    "assetRef": { "type": "string", "pattern": "^[a-z]+\\.[a-z0-9-]+@\\d+\\.\\d+\\.\\d+$" },
-    "role": { "type": "string", "pattern": "^(ink|ink-soft|ink-dark|thread|caption-base|emph|concept-[1-5]|guide)$" },
+    "assetRef": {
+      "type": "string",
+      "pattern": "^[a-z]+\\.[a-z0-9-]+@\\d+\\.\\d+\\.\\d+$"
+    },
+    "role": {
+      "type": "string",
+      "pattern": "^(ink|ink-soft|ink-dark|thread|caption-base|emph|concept-[1-5]|guide)$"
+    },
     "caption": {
       "type": "object",
-      "required": ["text", "at", "until"],
+      "required": [
+        "text",
+        "at",
+        "until"
+      ],
       "additionalProperties": false,
       "properties": {
-        "text": { "type": "string" },
-        "at": { "type": "number", "minimum": 0, "description": "Seconds from scene start." },
-        "until": { "type": "number", "minimum": 0 },
+        "text": {
+          "type": "string"
+        },
+        "at": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Seconds from scene start."
+        },
+        "until": {
+          "type": "number",
+          "minimum": 0
+        },
         "emph": {
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["word", "role"],
+            "required": [
+              "word",
+              "role"
+            ],
             "additionalProperties": false,
-            "properties": { "word": { "type": "string" }, "role": { "$ref": "#/$defs/role" } }
+            "properties": {
+              "word": {
+                "type": "string"
+              },
+              "role": {
+                "$ref": "#/$defs/role"
+              }
+            }
           }
+        },
+        "speaker": {
+          "type": "string",
+          "description": "Dialogue: id of the speaker this caption belongs to."
+        },
+        "turn": {
+          "type": "boolean",
+          "description": "Dialogue: first card of a new guide turn → shows the turn marker (•)."
         }
       }
     },
     "element": {
       "type": "object",
-      "required": ["id", "asset"],
+      "required": [
+        "id",
+        "asset"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string" },
-        "asset": { "$ref": "#/$defs/assetRef" },
-        "x": { "type": "number" }, "y": { "type": "number" }, "scale": { "type": "number" },
-        "role": { "$ref": "#/$defs/role" },
-        "pose": { "type": "string" },
-        "state": { "type": "string" },
-        "enter": { "type": "string" }, "exit": { "type": "string" },
-        "at": { "type": "number" },
-        "props": { "type": "object" }
+        "id": {
+          "type": "string"
+        },
+        "asset": {
+          "$ref": "#/$defs/assetRef"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "scale": {
+          "type": "number"
+        },
+        "role": {
+          "$ref": "#/$defs/role"
+        },
+        "pose": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "enter": {
+          "type": "string"
+        },
+        "exit": {
+          "type": "string"
+        },
+        "at": {
+          "type": "number"
+        },
+        "props": {
+          "type": "object"
+        }
       }
     },
     "scene": {
       "type": "object",
-      "required": ["id", "duration", "layout", "vo", "captions", "motif", "transition_out"],
+      "required": [
+        "id",
+        "duration",
+        "layout",
+        "motif",
+        "transition_out"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string" },
-        "duration": { "type": "number", "minimum": 0.5, "description": "Seconds." },
-        "mode": { "enum": ["paper", "night"] },
-        "layout": { "enum": ["center-subject", "ladder-stack", "editorial-grid", "split-compare", "diagram-axes", "payoff-word", "full-bleed-texture"] },
-        "header": { "type": "string" },
-        "breadcrumb": { "type": "array", "items": { "type": "string" } },
-        "vo": { "type": "string" },
-        "first_change": { "type": "number", "minimum": 0 },
-        "captions": { "type": "array", "items": { "$ref": "#/$defs/caption" } },
-        "elements": { "type": "array", "items": { "$ref": "#/$defs/element" } },
+        "id": {
+          "type": "string"
+        },
+        "duration": {
+          "type": "number",
+          "minimum": 0.5,
+          "description": "Seconds."
+        },
+        "mode": {
+          "enum": [
+            "paper",
+            "night"
+          ]
+        },
+        "layout": {
+          "enum": [
+            "center-subject",
+            "ladder-stack",
+            "editorial-grid",
+            "split-compare",
+            "diagram-axes",
+            "payoff-word",
+            "full-bleed-texture"
+          ]
+        },
+        "header": {
+          "type": "string"
+        },
+        "breadcrumb": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vo": {
+          "type": "string"
+        },
+        "first_change": {
+          "type": "number",
+          "minimum": 0
+        },
+        "captions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/caption"
+          }
+        },
+        "elements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/element"
+          }
+        },
         "motif": {
           "type": "object",
-          "required": ["state"],
+          "required": [
+            "state"
+          ],
           "additionalProperties": false,
           "properties": {
-            "state": { "enum": ["home", "travel", "underline", "knot", "pulse", "carry", "strip", "absent"] },
-            "path": { "type": "string", "description": "Optional named path from the motif asset, or SVG path data in stage coords." }
+            "state": {
+              "enum": [
+                "home",
+                "travel",
+                "underline",
+                "knot",
+                "pulse",
+                "carry",
+                "strip",
+                "absent"
+              ]
+            },
+            "path": {
+              "type": "string",
+              "description": "Optional named path from the motif asset, or SVG path data in stage coords."
+            }
           }
         },
         "transition_out": {
           "type": "object",
-          "required": ["type"],
+          "required": [
+            "type"
+          ],
           "additionalProperties": false,
           "properties": {
-            "type": { "enum": ["morph", "carry", "push", "draw-through", "zoom-through", "wash", "cut", "end-loop"] },
-            "target": { "type": "string", "description": "Element id that morphs / is zoomed into." }
+            "type": {
+              "enum": [
+                "morph",
+                "carry",
+                "push",
+                "draw-through",
+                "zoom-through",
+                "wash",
+                "cut",
+                "end-loop"
+              ]
+            },
+            "target": {
+              "type": "string",
+              "description": "Element id that morphs / is zoomed into."
+            }
           }
         },
-        "echoes": { "type": "string", "description": "RETURN scenes: id of the HOOK scene they call back to." },
-        "sfx": { "type": "array", "items": { "type": "object", "properties": { "asset": { "$ref": "#/$defs/assetRef" }, "at": { "type": "number" } }, "required": ["asset", "at"], "additionalProperties": false } },
-        "notes": { "type": "string" }
+        "echoes": {
+          "type": "string",
+          "description": "RETURN scenes: id of the HOOK scene they call back to."
+        },
+        "sfx": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "asset": {
+                "$ref": "#/$defs/assetRef"
+              },
+              "at": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "asset",
+              "at"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "notes": {
+          "type": "string"
+        },
+        "lines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/line"
+          },
+          "description": "Dialogue lines in speaking order. Replaces vo."
+        },
+        "cast": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/castState"
+          },
+          "description": "Persistent cast layer: speakerId → pose/position for this scene. Speakers not listed are off stage."
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "vo",
+            "captions"
+          ]
+        },
+        {
+          "required": [
+            "lines"
+          ]
+        }
+      ]
+    },
+    "emphList": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "word",
+          "role"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "word": {
+            "type": "string"
+          },
+          "role": {
+            "$ref": "#/$defs/role"
+          }
+        }
+      }
+    },
+    "line": {
+      "type": "object",
+      "required": [
+        "speaker",
+        "text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "speaker": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "emph": {
+          "$ref": "#/$defs/emphList"
+        },
+        "at": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Filled by tools/dialogue.py (seconds from scene start)."
+        },
+        "until": {
+          "type": "number",
+          "minimum": 0
+        },
+        "audio": {
+          "type": "string",
+          "description": "Filled by tools/dialogue.py: frozen line WAV path."
+        },
+        "say": {
+          "type": "string",
+          "description": "Optional pronunciation for TTS; captions always use `text`."
+        }
+      }
+    },
+    "castState": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pose": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "scale": {
+          "type": "number"
+        }
       }
     }
   },
   "properties": {
     "meta": {
       "type": "object",
-      "required": ["id", "title", "format", "fps", "mode", "seed", "voice", "pulse"],
+      "required": [
+        "id",
+        "title",
+        "format",
+        "fps",
+        "mode",
+        "seed",
+        "voice",
+        "pulse"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-        "title": { "type": "string" },
-        "format": { "enum": ["portrait", "landscape"] },
-        "fps": { "enum": [24, 25, 30, 60] },
-        "mode": { "enum": ["paper", "night"] },
-        "seed": { "type": "integer" },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "format": {
+          "enum": [
+            "portrait",
+            "landscape"
+          ]
+        },
+        "fps": {
+          "enum": [
+            24,
+            25,
+            30,
+            60
+          ]
+        },
+        "mode": {
+          "enum": [
+            "paper",
+            "night"
+          ]
+        },
+        "seed": {
+          "type": "integer"
+        },
         "voice": {
-          "type": "object", "required": ["register"], "additionalProperties": false,
-          "properties": { "register": { "enum": ["contemplative", "explainer"] }, "asset": { "$ref": "#/$defs/assetRef" } }
+          "type": "object",
+          "required": [
+            "register"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "register": {
+              "enum": [
+                "contemplative",
+                "explainer"
+              ]
+            },
+            "asset": {
+              "$ref": "#/$defs/assetRef"
+            }
+          }
         },
         "pulse": {
-          "type": "object", "required": ["bpm", "asset"], "additionalProperties": false,
-          "properties": { "bpm": { "type": "number", "minimum": 50, "maximum": 100 }, "asset": { "$ref": "#/$defs/assetRef" } }
+          "type": "object",
+          "required": [
+            "bpm",
+            "asset"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "bpm": {
+              "type": "number",
+              "minimum": 50,
+              "maximum": 100
+            },
+            "asset": {
+              "$ref": "#/$defs/assetRef"
+            }
+          }
         },
-        "fonts": { "type": "array", "items": { "$ref": "#/$defs/assetRef" } }
+        "fonts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/assetRef"
+          }
+        },
+        "dialogue": {
+          "type": "object",
+          "required": [
+            "mode",
+            "speakers"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "enum": [
+                "curious",
+                "socratic"
+              ]
+            },
+            "speakers": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "role",
+                  "voice"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  },
+                  "role": {
+                    "enum": [
+                      "guide",
+                      "learner"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "voice": {
+                    "$ref": "#/$defs/assetRef"
+                  },
+                  "character": {
+                    "$ref": "#/$defs/assetRef"
+                  },
+                  "length_scale": {
+                    "type": "number",
+                    "minimum": 0.7,
+                    "maximum": 1.4
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "motif": {
       "type": "object",
-      "required": ["asset", "meaning"],
+      "required": [
+        "asset",
+        "meaning"
+      ],
       "additionalProperties": false,
       "properties": {
-        "asset": { "$ref": "#/$defs/assetRef" },
-        "meaning": { "type": "string", "description": "One sentence: what idea the thread IS in this video." }
+        "asset": {
+          "$ref": "#/$defs/assetRef"
+        },
+        "meaning": {
+          "type": "string",
+          "description": "One sentence: what idea the thread IS in this video."
+        }
       }
     },
     "concepts": {
       "type": "array",
       "maxItems": 5,
       "items": {
-        "type": "object", "required": ["name", "role"], "additionalProperties": false,
-        "properties": { "name": { "type": "string" }, "role": { "type": "string", "pattern": "^concept-[1-5]$" }, "symbol": { "type": "string" } }
+        "type": "object",
+        "required": [
+          "name",
+          "role"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "pattern": "^concept-[1-5]$"
+          },
+          "symbol": {
+            "type": "string"
+          }
+        }
       }
     },
-    "cast": { "type": "array", "items": { "$ref": "#/$defs/assetRef" } },
+    "cast": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assetRef"
+      }
+    },
     "beats": {
       "type": "array",
       "minItems": 3,
       "items": {
-        "type": "object", "required": ["id", "type", "scenes"], "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "scenes"
+        ],
+        "additionalProperties": false,
         "properties": {
-          "id": { "type": "string" },
-          "type": { "enum": ["HOOK", "DEFINE", "LADDER", "TURN", "RULE", "RETURN"] },
-          "scenes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/scene" } }
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "HOOK",
+              "DEFINE",
+              "LADDER",
+              "TURN",
+              "RULE",
+              "RETURN"
+            ]
+          },
+          "scenes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/scene"
+            }
+          }
         }
       }
     }

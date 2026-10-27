@@ -42,6 +42,7 @@ Engagement is not a quality score, but it is a signal: the two reels that never 
 | **Captions:** 2–4 words, serif italic, base colour plus **one keyword in an accent** | | The text reads in under 0.5 s and the keyword *is* the summary |
 | **Persistent motif in a fixed home** (the drop) that reacts when named | | It is the visual thesis, always present |
 | **Breadcrumb of struck-through eliminations** | | It shows the progress of an argument by negation |
+| **Two voices, typeset differently**: the leading voice is italic teal with a `•` opening each new turn ("• Who are you?"); John answers upright in ink ("I'm John"). The Socratic Q/A *is* the script. | | You can tell who speaks without speech bubbles or names, and the dialogue keeps a hard idea conversational. This became RULES §2b. |
 | **Ring structure**: "Who are you?" → "I am." | | The ending re-reads the beginning |
 | 120 wpm with real pauses after questions | | Room to think |
 

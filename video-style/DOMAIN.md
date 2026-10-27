@@ -63,6 +63,10 @@ Dependencies only point to the right. A storyboard can refer to tokens and asset
 | **Caption** | value object | `{text, start, end, emph[]}` | 1–4 words, ≤ 28 characters, held ≥ 0.4 s, and at most one word marked `thread`. |
 | **Transition** | value object | `{type, frames}` from the catalogue | It is continuity by default (`morph`, `carry`, `push`, `draw-through`). A hard `cut` is a punctuation mark, used at most 3 times a minute. |
 | **Breadcrumb** | value object | list of eliminated ideas | Rendered in the header with a strike-through, to show the hypotheses the story has ruled out. |
+| **Dialogue** | value object | `meta.dialogue {mode, speakers}` | Mode is `curious` or `socratic`. Exactly two speakers. |
+| **Speaker** | entity | `speakers[].id` | Its role is `guide` (leads; embodied by the thread) or `learner` (asks; embodied by a `character.*` on the cast layer). It has a frozen `voice.*` asset. |
+| **Line** | value object | `{speaker, text, say?, emph?}` → timed `{at, until, audio}` | One utterance. It is synthesised once and frozen as `assets/vo/<video>/lines/<speaker>-<hash>.wav`. Captions are verbatim chunks of it. |
+| **Cast state** | value object | `scene.cast[speakerId] {pose, x, y, scale}` | Where a speaker's character is during a scene. Characters persist across scenes, like the thread, and walk between states. |
 
 ### Render context
 
@@ -107,6 +111,9 @@ States of an **Asset**: `proposed → drafted → reviewed → published (frozen
 - **Elimination**: a Socratic step (“Are you this face? No.”) that sends an idea to the breadcrumb, struck through.
 - **Strip**: subtractive demonstration (“take away the voices, take away the gunfire…”). Layers are removed until the thread is the only thing left.
 - **Return**: the final beat, which echoes the hook so the last frame can loop into the first.
+- **Guide / learner**: the two dialogue voices. The guide leads and *is* the thread; the learner asks and *is* the character.
+- **Turn marker**: the `•` that opens each new guide turn in the captions.
+- **Two-voice ladder**: the learner proposes the rung ("So if…?") and the guide completes it ("…then you get…").
 - **Treatment**: the mandatory stylisation applied to any photo or footage.
 - **Boil**: seeded per-frame jitter of ink lines, stepped on twos, which makes drawings feel alive.
 - **On twos**: hand-drawn elements update every 2nd frame (12 fps feel) while the camera and the thread move on ones (smooth). This mix is the house signature.

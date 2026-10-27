@@ -60,6 +60,12 @@ export const spring = (name: keyof typeof M.spring) => M.spring[name].$value;
 export const cadence = M.cadence;
 export const boil = {amplitude: M.boil['amplitude-px'].$value, variants: M.boil.variants.$value};
 export const camera = {push: M.camera['push-scale'].$value, zoomThrough: M.camera['zoom-through'].$value};
+export const dialogueMotion = {
+	bobPx: M.dialogue['talk-bob-px'].$value,
+	bobHz: M.dialogue['talk-bob-hz'].$value,
+	swell: M.dialogue['thread-swell'].$value,
+	ramp: M.dialogue['speak-ramp-frames'].$value,
+};
 
 type TransitionName = keyof typeof M.transition;
 export const transitionFrames = (name: string, fps: number) => {

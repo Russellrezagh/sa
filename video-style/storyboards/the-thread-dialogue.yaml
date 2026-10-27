@@ -1,0 +1,154 @@
+# Dialogue version of the demo: a GUIDE leads, a LEARNER asks (curious mode).
+# 1. python3 -I video-style/tools/dialogue.py video-style/storyboards/the-thread-dialogue.yaml
+#    (voices every line once, freezes it, times captions → the-thread-dialogue.timed.yaml)
+# 2. python3 -I video-style/tools/lint_storyboard.py video-style/storyboards/the-thread-dialogue.timed.yaml \
+#      --emit video-style/kit/src/storyboards/the-thread-dialogue.json
+# Durations below are minimums; dialogue.py stretches a scene to fit its lines.
+meta:
+  id: the-thread-dialogue
+  title: Why do some videos pull you in?
+  format: portrait
+  fps: 30
+  mode: paper
+  seed: 9182
+  voice: { register: explainer }
+  pulse: { bpm: 70, asset: bed.pulse-70@1.0.0 }
+  fonts: [font.instrument-serif@1.0.0, font.inter@1.0.0, font.jetbrains-mono@1.0.0]
+  dialogue:
+    mode: curious
+    speakers:
+      - { id: guide, role: guide, name: Guide, voice: voice.joe@1.0.0 }
+      - { id: sam, role: learner, name: Sam, voice: voice.alba@1.0.0, character: character.everyperson@1.0.0 }
+
+motif:
+  asset: motif.thread@1.0.0
+  meaning: The guide's idea made visible; it leads the learner (and the viewer) from scene to scene.
+
+concepts:
+  - { name: line, role: concept-1 }
+  - { name: meaning, role: concept-4 }
+  - { name: viewer, role: concept-3 }
+
+cast: [character.everyperson@1.0.0]
+
+beats:
+  - id: hook
+    type: HOOK
+    scenes:
+      - id: hook-question
+        duration: 3.0
+        layout: center-subject
+        first_change: 0
+        header: "?"
+        cast: { sam: { pose: neutral, x: 0.26, y: 0.47, scale: 0.95 } }
+        lines:
+          - { speaker: sam, text: "Why do some videos just pull you in?", emph: [{ word: pull, role: emph }] }
+          - { speaker: guide, text: "Because something runs through them. A thread.", emph: [{ word: thread, role: thread }] }
+        motif: { state: travel, path: across }
+        transition_out: { type: carry }
+
+  - id: define
+    type: DEFINE
+    scenes:
+      - id: define-word
+        duration: 3.0
+        layout: payoff-word
+        cast: { sam: { pose: neutral, x: 0.22, y: 0.47, scale: 0.9 } }
+        elements:
+          - { id: word, asset: template.caption@1.0.0, x: 0.6, y: 0.33, at: 0.3, props: { setup: "a Chinese word:", payoff: "mài", payoffRole: thread } }
+        lines:
+          - { speaker: guide, text: "There's a Chinese word for it. Mài.", say: "There's a Chinese word for it. My.", emph: [{ word: mài, role: thread }] }
+          - { speaker: sam, text: "Like a pulse?" }
+        motif: { state: underline, path: underline }
+        sfx: [{ asset: sfx.ripple-ping@1.0.0, at: 1.9 }]
+        transition_out: { type: carry }
+      - id: define-leaf
+        duration: 3.0
+        layout: center-subject
+        cast: { sam: { pose: point, x: 0.2, y: 0.5, scale: 0.85 } }
+        elements:
+          - { id: leaf, asset: icon.leaf@1.0.0, x: 0.6, y: 0.33, scale: 2.8, enter: draw }
+        lines:
+          - { speaker: guide, text: "Closer. The veins in a leaf: the thread that runs through a story.", emph: [{ word: veins, role: emph }, { word: thread, role: thread }] }
+        motif: { state: travel, path: rib }
+        sfx: [{ asset: sfx.pencil@1.0.0, at: 0.2 }]
+        transition_out: { type: zoom-through, target: leaf }
+
+  - id: ladder
+    type: LADDER
+    scenes:
+      - id: rung-line
+        duration: 2.4
+        layout: ladder-stack
+        header: "a line"
+        cast: { sam: { pose: neutral, x: 0.24, y: 0.47, scale: 0.95 } }
+        lines:
+          - { speaker: sam, text: "So if I draw a line?", emph: [{ word: line, role: concept-1 }] }
+          - { speaker: guide, text: "Then you get a path. Just a path." }
+        motif: { state: travel, path: lead }
+        transition_out: { type: push }
+      - id: rung-meaning
+        duration: 2.6
+        layout: ladder-stack
+        header: "a line → a path"
+        cast: { sam: { pose: neutral, x: 0.24, y: 0.47, scale: 0.95 } }
+        elements:
+          - { id: watch, asset: icon.watch@1.0.0, x: 0.62, y: 0.29, scale: 1.3, enter: pop, role: concept-4, props: { track: true } }
+        lines:
+          - { speaker: sam, text: "And if the path means something?", emph: [{ word: means, role: concept-4 }] }
+          - { speaker: guide, text: "Give a path a meaning, and it becomes a thread.", emph: [{ word: meaning, role: concept-4 }, { word: thread, role: thread }] }
+        motif: { state: pulse, path: strip }
+        transition_out: { type: push }
+      - id: rung-viewer
+        duration: 2.8
+        layout: ladder-stack
+        header: "a path → a thread"
+        cast: { sam: { pose: point, x: 0.42, y: 0.47, scale: 0.95 } }
+        lines:
+          - { speaker: sam, text: "And if someone follows it?", emph: [{ word: someone, role: concept-3 }] }
+          - { speaker: guide, text: "Now you have a story. That's the whole trick.", emph: [{ word: story, role: emph }] }
+        motif: { state: travel, path: lead }
+        transition_out: { type: wash }
+
+  - id: turn
+    type: TURN
+    scenes:
+      - id: strip
+        duration: 3.4
+        mode: night
+        layout: full-bleed-texture
+        notes: Sam leaves the stage on purpose; the strip removes everything but the thread.
+        lines:
+          - { speaker: guide, text: "Listen. Take away the words. Take away the colour." }
+          - { speaker: sam, text: "It's... still there.", emph: [{ word: there, role: thread }] }
+        motif: { state: pulse, path: strip }
+        transition_out: { type: wash }
+
+  - id: rule
+    type: RULE
+    scenes:
+      - id: rule-payoff
+        duration: 2.6
+        layout: payoff-word
+        cast: { sam: { pose: neutral, x: 0.22, y: 0.47, scale: 0.9 } }
+        elements:
+          - { id: rule-word, asset: template.caption@1.0.0, x: 0.6, y: 0.33, at: 0.2, props: { setup: "every video needs a", payoff: "thread.", payoffRole: thread } }
+        lines:
+          - { speaker: sam, text: "So every video needs a thread.", emph: [{ word: thread, role: thread }] }
+          - { speaker: guide, text: "Exactly. One thread, start to finish." }
+        motif: { state: underline, path: underline }
+        transition_out: { type: carry }
+
+  - id: return
+    type: RETURN
+    scenes:
+      - id: return-loop
+        duration: 2.2
+        layout: center-subject
+        echoes: hook-question
+        header: "?"
+        cast: { sam: { pose: shrug, x: 0.26, y: 0.47, scale: 0.95 } }
+        lines:
+          - { speaker: sam, text: "So that's what pulls you in.", emph: [{ word: pulls, role: emph }] }
+        motif: { state: travel, path: across }
+        transition_out: { type: end-loop }

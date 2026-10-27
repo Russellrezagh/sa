@@ -3,6 +3,7 @@ import {AbsoluteFill, Audio, interpolate, interpolateColors, Sequence, spring, s
 import {interpolatePaths} from '@remotion/paths';
 import {resolveAsset, scalePath, THREAD_PATHS} from './assetRegistry';
 import {Caption} from './components/Caption';
+import {CastLayer, speaking} from './components/CastLayer';
 import {Header} from './components/Header';
 import {InkShape} from './components/InkShape';
 import {Paper} from './components/Paper';
@@ -11,7 +12,7 @@ import {pulsePath, Thread} from './components/Thread';
 import {TrackBox} from './components/TrackBox';
 import {seedFor} from './determinism';
 import {ensureFonts} from './fonts';
-import {camera, color, dur, ease, layout, spring as springTok, transitionFrames, type Mode, type Role} from './tokens';
+import {camera, color, dialogueMotion, dur, ease, layout, spring as springTok, transitionFrames, type Mode, type Role} from './tokens';
 import type {Board, Element, Scene} from './types';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
@@ -146,8 +147,9 @@ const SceneView: React.FC<{board: Board; scene: Scene; prevScene?: Scene}> = ({b
 			</AbsoluteFill>
 			<AbsoluteFill style={{opacity: zoomTarget ? 1 - zoomP : 1}}>
 				<Header text={scene.header} breadcrumb={scene.breadcrumb} mode={mode} y={height * (L.zone.header.y0 + L.zone.header.y1) / 2} marginX={width * L['margin-x'].$value} />
-				{scene.captions.map((c, i) => (
-					<Caption key={i} caption={c} mode={mode} y={height * (L.zone.caption.y0 + L.zone.caption.y1) / 2} />
+				{(scene.captions ?? []).map((c, i) => (
+					<Caption key={i} caption={c} mode={mode} y={height * (L.zone.caption.y0 + L.zone.caption.y1) / 2}
+						speakerRole={board.meta.dialogue?.speakers.find((s) => s.id === c.speaker)?.role} />
 				))}
 			</AbsoluteFill>
 			{(scene.sfx ?? []).map((s, i) => {
@@ -198,6 +200,10 @@ export const StoryboardVideo: React.FC<{board: Board}> = ({board}) => {
 		start = interpolate(t, [cur.frames - tOut, cur.frames - 1], [0, 1], {...clamp, easing: ease('draw')});
 	}
 	const threadColor = interpolateColors(bgP, [0, 1], [color(prevMode, 'thread'), color(curMode, 'thread')]);
+	// The guide has no body: the thread is the guide. It swells while the guide speaks.
+	const guide = board.meta.dialogue?.speakers.find((s) => s.role === 'guide');
+	const swell = guide ? 1 + dialogueMotion.swell * speaking(cur, guide.id, t, fps) : 1;
+	const vo = board.meta.voice.asset ? resolveAsset(board.meta.voice.asset) : undefined;
 
 	const bed = resolveAsset(board.meta.pulse.asset);
 	return (
@@ -213,13 +219,16 @@ export const StoryboardVideo: React.FC<{board: Board}> = ({board}) => {
 					/>
 				</AbsoluteFill>
 			) : null}
-			<Thread d={d} start={start} end={end} color={threadColor} width={(7 * width) / 1080} glow={curMode === 'night' ? threadColor : undefined} />
+			<Thread d={d} start={start} end={end} color={threadColor} width={(7 * width * swell) / 1080} glow={curMode === 'night' ? threadColor : undefined} />
+			<CastLayer board={board} scenes={scenes} idx={idx} t={t} mode={curMode} />
 			{scenes.map((s, i) => (
 				<Sequence key={s.id} from={s.from} durationInFrames={s.frames} name={`${s.beat} · ${s.id}`}>
 					<SceneView board={board} scene={s} prevScene={scenes[i - 1]} />
 				</Sequence>
 			))}
-			{bed.kind === 'audio' ? <Audio src={staticFile(bed.file)} loop volume={0.9} /> : null}
+			{/* bed ≈ 18 LU under the VO (audio.loudness.vo-over-bed-lu) */}
+			{bed.kind === 'audio' ? <Audio src={staticFile(bed.file)} loop volume={vo ? 0.8 : 0.9} /> : null}
+			{vo?.kind === 'audio' ? <Audio src={staticFile(vo.file)} /> : null}
 		</AbsoluteFill>
 	);
 };

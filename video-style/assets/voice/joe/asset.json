@@ -1,0 +1,41 @@
+{
+  "id": "voice.joe",
+  "version": "1.0.0",
+  "kind": "voice",
+  "status": "published",
+  "title": "Joe (guide voice)",
+  "description": "Calm US-English male voice for the GUIDE: the one who leads the conversation. Piper medium, 22.05 kHz. The model is downloaded on demand by tools/dialogue.py and verified against the sha256 below. Synthesis is stochastic, so every line is generated once and frozen (RULES D5).",
+  "files": [],
+  "implementation": {
+    "kit_component": "Audio",
+    "props": {
+      "engine": "piper-tts",
+      "length_scale": 0.94,
+      "sample_rate": 22050
+    },
+    "model": {
+      "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/joe/medium/en_US-joe-medium.onnx",
+      "config_url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/joe/medium/en_US-joe-medium.onnx.json",
+      "sha256": "58afce0321b8d9c46d7cdf9c16500cc55a793b4220212dba6b70fb788b3baf06",
+      "config_sha256": "3d6d5410b3795cb1950595247ef8f06190719e6fdbfa3a2356d8ec368e1aad33"
+    },
+    "deterministic_inputs": [
+      "model sha256",
+      "text",
+      "length_scale"
+    ]
+  },
+  "provenance": {
+    "source": "licensed",
+    "author": "rhasspy/piper-voices",
+    "created": "2026-10-27",
+    "tool": "piper-tts",
+    "reference": "https://github.com/NabuCasa/voice-datasets"
+  },
+  "license": "CC0-1.0 (dataset: NabuCasa voice-datasets); Piper model MIT",
+  "tags": [
+    "voice",
+    "tts",
+    "dialogue"
+  ]
+}

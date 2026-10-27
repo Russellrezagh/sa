@@ -1,6 +1,6 @@
 ---
 name: mai-video
-description: Make a short explainer or essay video in the MAI house style (one persistent thread motif, warm paper with ink and watercolour, semantic colour, continuity transitions, ring structure) as a deterministic Remotion render. Use when asked to make, script, storyboard, animate or render a video, reel, short or explainer, to add a reference video to the style, or to create a video asset (character pose, icon, sound, texture).
+description: Make a short explainer or essay video in the MAI house style (one persistent thread motif, warm paper with ink and watercolour, semantic colour, continuity transitions, ring structure, two-voice guide/learner dialogue narration) as a deterministic Remotion render. Use when asked to make, script, storyboard, animate or render a video, reel, short or explainer, to add a reference video to the style, or to create a video asset (character pose, icon, sound, texture).
 ---
 
 # MAI video skill
@@ -37,6 +37,18 @@ HOOK → DEFINE → LADDER → TURN → RULE → RETURN (RULES §2).
 - The RETURN echoes the HOOK's words, so the last frame loops into the first.
 - Budget the words per scene as `duration × wpm / 60`. Split captions into cards of 1–4 words (≤ 28 characters each).
 
+### 2b · Dialogue (the default narration)
+Unless the user asks for a single narrator, write the script as a **conversation** (RULES §2b):
+- Declare `meta.dialogue` with `mode: curious` (the learner asks, the guide explains) or `socratic` (the guide leads by asking). Use a `guide` with `voice.joe@1.0.0` and a `learner` with `voice.alba@1.0.0` and `character.everyperson@1.0.0`.
+- Write `lines:` per scene instead of `vo:`, and give each scene a `cast:` entry for the learner (pose plus position at the side of the stage).
+- Follow the per-beat grammar: the learner asks the HOOK, the guide names the idea, the two build a two-voice ladder, the guide takes the TURN, **the learner states the RULE** and the guide confirms, and the learner answers their own question in the RETURN.
+- Keep learner lines ≤ 12 words and guide lines ≤ 24, and let the guide speak 55–80 % of the words.
+- Then voice and time it. Each line is synthesised once, frozen and hashed, and the captions are timed to the real audio:
+```bash
+python3 -I video-style/tools/dialogue.py video-style/storyboards/<id>.yaml   # → <id>.timed.yaml + vo.<id> asset
+```
+Lint and emit the **`.timed.yaml`**. The worked example is `storyboards/the-thread-dialogue.yaml`.
+
 ### 3 · Storyboard → lint (gate)
 Copy `video-style/storyboards/give-it-a-thread.yaml` to `video-style/storyboards/<id>.yaml` and fill it in. Then run:
 ```bash
@@ -57,6 +69,7 @@ python3 -I video-style/tools/lint_storyboard.py video-style/storyboards/<id>.yam
 cd video-style/kit && npm ci && npx tsc --noEmit
 npx remotion still <Id> out/<id>-f60.png --frame=60      # check key frames first: cheap
 npx remotion render <Id> out/<id>.mp4                    # then the full render
+python3 -I ../tools/master.py out/<id>.mp4               # → out/<id>.master.mp4 at -14 LUFS / -1 dBTP (RULES A1)
 ../tools/contact_sheet.sh out/<id>.mp4                   # review sheet
 ```
 Look at the stills and the contact sheet yourself (open the PNGs) before reporting that the video is done. If Remotion can't find Chrome in a sandbox, pass `--browser-executable=<path to chrome-headless-shell>`.
@@ -77,7 +90,8 @@ Go through the checklist in RULES §9 against the contact sheet. Report to the u
 | `StoryboardVideo` | renders a compiled storyboard | Renders the thread once for the whole video and morphs it between scenes with `interpolatePaths`. |
 | `Thread`, `pulsePath` | `motif.thread@1.0.0` | States: travel, underline, home, pulse, strip, absent. |
 | `InkShape` | icons and characters | Ink boils on twos; washes sit off-register. |
-| `Caption` | `template.caption@1.0.0` | Word-stagger entry; keywords coloured by role. |
+| `Caption` | `template.caption@1.0.0` | Word-stagger entry; keywords coloured by role. Guide lines italic with a `•` turn marker; learner lines upright. |
+| `CastLayer`, `speaking` | `character.*` per speaker | Persistent characters that walk between scenes and bob while speaking. |
 | `SetupPayoff` | payoff words | Small setup line above a sprung payoff word. |
 | `Header` | header and breadcrumb | Struck-through eliminations. |
 | `Lens` | `motif.lens@1.0.0` | Alternative primary motif with ripple rings. |

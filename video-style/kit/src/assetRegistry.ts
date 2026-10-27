@@ -52,6 +52,9 @@ const REGISTRY: Record<string, Entry> = {
 };
 
 export const resolveAsset = (ref: string): Entry => {
+	// Dialogue VO tracks are generated per video by tools/dialogue.py: vo.<id>@x.y.z → vo/<id>/dialogue.wav
+	const vo = /^vo\.([a-z0-9-]+)@\d+\.\d+\.\d+$/.exec(ref);
+	if (vo) return {kind: 'audio', file: `vo/${vo[1]}/dialogue.wav`};
 	const e = REGISTRY[ref];
 	// Unknown refs are a hard error: the renderer may not invent assets.
 	if (!e) throw new Error(`Asset ${ref} is not registered in kit/src/assetRegistry.ts`);

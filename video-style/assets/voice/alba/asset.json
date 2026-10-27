@@ -1,0 +1,41 @@
+{
+  "id": "voice.alba",
+  "version": "1.0.0",
+  "kind": "voice",
+  "status": "published",
+  "title": "Alba (learner voice)",
+  "description": "Bright UK-English female voice for the LEARNER: the viewer's stand-in who asks. Piper medium, 22.05 kHz. Attribution required (CC BY 4.0). The model is downloaded on demand by tools/dialogue.py and verified against the sha256 below. Synthesis is stochastic, so every line is generated once and frozen (RULES D5).",
+  "files": [],
+  "implementation": {
+    "kit_component": "Audio",
+    "props": {
+      "engine": "piper-tts",
+      "length_scale": 1.0,
+      "sample_rate": 22050
+    },
+    "model": {
+      "url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alba/medium/en_GB-alba-medium.onnx",
+      "config_url": "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_GB/alba/medium/en_GB-alba-medium.onnx.json",
+      "sha256": "401369c4a81d09fdd86c32c5c864440811dbdcc66466cde2d64f7133a66ad03b",
+      "config_sha256": "aa965a2f02ecced632c2694e1fc72bbff6d65f265fab567ca945918c73dd89f4"
+    },
+    "deterministic_inputs": [
+      "model sha256",
+      "text",
+      "length_scale"
+    ]
+  },
+  "provenance": {
+    "source": "licensed",
+    "author": "rhasspy/piper-voices",
+    "created": "2026-10-27",
+    "tool": "piper-tts",
+    "reference": "https://datashare.ed.ac.uk/handle/10283/3270"
+  },
+  "license": "CC-BY-4.0 (dataset: Edinburgh DataShare 10283/3270, credit 'alba'); Piper model MIT",
+  "tags": [
+    "voice",
+    "tts",
+    "dialogue"
+  ]
+}

@@ -45,6 +45,42 @@ Beat types, in order: **HOOK → DEFINE → LADDER → TURN → RULE → RETURN*
 | N7 | Put **one humour or surprise beat** just before RULE (the reference is the stacked `final_REALLY_final.aep` dialogs). It resets attention before the takeaway. |
 | N8 | Use the viewer's words. When a surrogate character speaks, they ask the *viewer's* question and are allowed to be wrong ("Kind of, I think…"). |
 
+## 2b. Dialogue narration: rules G
+
+The preferred narration is a **two-voice conversation**. The **guide** leads and explains. The **learner** speaks for the viewer: they ask, guess, are sometimes wrong, and finally say the idea in their own words. This comes from the Philosophy of Everything reel's Socratic exchange ("Who are you?" / "I'm John." / "John is just a sound."), merged with the explainer ladder of the GraduateML reel.
+
+**Two modes** (set in `meta.dialogue.mode`):
+| Mode | Who asks | Who leads | Feel |
+|---|---|---|---|
+| `curious` | the learner asks; the guide explains | guide | warm explainer (the default) |
+| `socratic` | the guide asks leading questions; the learner answers | guide | contemplative, philosophical |
+
+**Conversation grammar per beat:**
+| Beat | Curious mode | Socratic mode |
+|---|---|---|
+| HOOK | Learner asks the naive question ("Why do some videos pull you in?"). Guide gives a teaser answer. | Guide asks the big question ("Who are you?"). Learner gives the obvious answer ("I'm John."). |
+| DEFINE | Guide names the idea with a metaphor. Learner guesses ("Like a pulse?"). Guide corrects ("Closer. …"). | Guide pokes at the answer ("John is just a sound."). |
+| LADDER | **Two-voice ladder:** the learner proposes each rung ("So if I draw a line?") and the guide completes it ("Then you get a path."). | **Elimination:** the guide asks "Are you X?", the learner says "No…", and X goes into the struck-through breadcrumb. |
+| TURN | Guide takes over ("Listen."). The learner falls silent, then reacts in one short line. | Same. |
+| RULE | **The learner states the rule** and the guide confirms ("Exactly."). That shows the learning worked. | The learner arrives at it, or the guide states it and the learner repeats it. |
+| RETURN | The learner answers their own HOOK question. | The learner answers the HOOK question differently than at the start. |
+
+| ID | Rule |
+|---|---|
+| **G0** `[lint]` | Dialogue lines are timed by `tools/dialogue.py`. Always lint the generated `*.timed.yaml`, never the source. |
+| **G1** `[lint]` | Exactly two speakers: one `guide` and one `learner`. Every line, caption and cast entry names a declared speaker. |
+| **G2** `[lint]` | The guide leads: **55–80 %** of the words are the guide's. |
+| **G3** `[lint]` | Learner lines have ≤ 12 words and guide lines ≤ 24. Short turns keep it a conversation. |
+| **G4** `[lint]` | The HOOK contains a question from the asker of the chosen mode. |
+| **G5** `[lint]` | The learner speaks in the RULE beat (they state the takeaway). |
+| **G6** `[lint]` | No more than 3 lines in a row by the same speaker. |
+| **G7** `[lint]` | Captions are verbatim chunks of their speaker's lines, and each carries `speaker`. |
+| G8 | **Typesetting:** guide lines are *Instrument Serif Italic* in `caption-base`, and the first card of each new guide turn gets a `•` in `emph`. Learner lines are upright Instrument Serif in `ink`. Both share the one caption line, so attribution comes from type alone and there are no speech bubbles. |
+| G9 | **Embodiment:** the learner is the on-stage character (`speakers[].character`). They live on the persistent **cast layer**, walk between per-scene positions (`scene.cast`), and bob while speaking. The guide has **no body: the guide is the thread**, which swells while the guide speaks. The guide "pulls them forward" (Dunkirk reel). |
+| G10 | **Staging:** the learner stands to one side of the stage (x ≈ 0.2–0.3, smaller than the subject), so the subject keeps the optical centre (V9). The learner may leave the stage for the TURN. |
+| G11 | **Casting:** the two voices must contrast in pitch *and* accent, so a listener can tell them apart within one second (default: `voice.joe` as guide, `voice.alba` as learner). Each line is generated once and frozen (D5). Use `say:` for pronunciation; captions always use `text`. |
+| G12 | **Timing:** 0.30 s between speakers, 0.15 s within a speaker, and +0.30 s after any question. Captions follow the frozen audio (speech-only clock); the audio never follows the captions. |
+
 ## 3. Colour: rules K
 
 | ID | Rule |
@@ -101,7 +137,7 @@ Beat types, in order: **HOOK → DEFINE → LADDER → TURN → RULE → RETURN*
 
 | ID | Rule |
 |---|---|
-| A1 | Master to **−14 LUFS integrated, −1 dBTP**. The pulse bed sits about 18 LU under VO. |
+| A1 | Master to **−14 LUFS integrated, −1 dBTP** with `tools/master.py`, which runs after the render because the renderer's mixer attenuates summed tracks. The pulse bed sits about 18 LU under VO. A video with **no VO** (pulse only) cannot reach −14 without crushing the ticks, so it masters to about −19 LUFS, and the tool reports when it had to limit. |
 | A2 | Caption onsets and transition starts land on a pulse subdivision (½ or ¼ beat) whenever the VO allows. |
 | A3 | SFX vocabulary: `sfx.pencil` under draw-ons, `sfx.ripple-ping` when the idea is named, `sfx.pulse-tick` for single beats. Each strip step is a **hard drop-out**, not a fade. |
 | A4 | Sound assets are generated by code (`tools/gen_audio.py`) or recorded and then frozen. They are loudness-normalised at ingest, with the value written in the manifest. |
