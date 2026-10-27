@@ -1,0 +1,107 @@
+{
+ "file": null,
+ "size": [
+  1080,
+  1920
+ ],
+ "duration_s": 40.33,
+ "palette": [
+  {
+   "hex": "#090f13",
+   "share": 0.945
+  },
+  {
+   "hex": "#201f21",
+   "share": 0.015
+  },
+  {
+   "hex": "#632b23",
+   "share": 0.013
+  },
+  {
+   "hex": "#324349",
+   "share": 0.008
+  },
+  {
+   "hex": "#9a4435",
+   "share": 0.006
+  },
+  {
+   "hex": "#49686b",
+   "share": 0.006
+  },
+  {
+   "hex": "#75898d",
+   "share": 0.003
+  },
+  {
+   "hex": "#d06649",
+   "share": 0.002
+  },
+  {
+   "hex": "#aebbbe",
+   "share": 0.002
+  },
+  {
+   "hex": "#4a98ea",
+   "share": 0.001
+  }
+ ],
+ "mean_luminance": 17.2,
+ "mean_saturation": 0.048,
+ "motion_energy_mean": 2.39,
+ "motion_energy_p90": 5.54,
+ "motion_energy_per_second": [
+  3.5,
+  0.5,
+  0.4,
+  0.4,
+  0.0,
+  1.0,
+  3.0,
+  0.9,
+  0.6,
+  1.9,
+  1.4,
+  1.9,
+  1.3,
+  0.5,
+  0.0,
+  0.7,
+  0.3,
+  0.0,
+  2.5,
+  0.8,
+  0.5,
+  0.6,
+  5.2,
+  3.8,
+  1.6,
+  0.2,
+  0.1,
+  0.5,
+  0.6,
+  0.6,
+  3.5,
+  8.8,
+  2.6,
+  0.7,
+  1.2,
+  11.3,
+  3.7,
+  21.9,
+  5.2,
+  1.3
+ ],
+ "tempo_bpm": 78.3,
+ "onsets_per_second": 4.51,
+ "rms_db_mean": -18.1,
+ "rms_dynamic_range_db": 27.5,
+ "source_url": "https://www.instagram.com/reel/DeP8tjxpP6L/",
+ "hard_cuts_scene_gt_0_3": 0,
+ "cut_times_s": [],
+ "vo_words": 134,
+ "vo_wpm": 200,
+ "vo_pauses_gt_0_6s": 1,
+ "note": "Measured by tools/analyze_reference.py. Media is not redistributed; re-download to re-measure."
+}

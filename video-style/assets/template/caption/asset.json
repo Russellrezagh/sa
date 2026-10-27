@@ -1,0 +1,43 @@
+{
+  "id": "template.caption",
+  "version": "1.0.0",
+  "kind": "template",
+  "status": "published",
+  "title": "Caption card",
+  "description": "One caption card: Instrument Serif Italic, caption-base colour, emphasised words in their concept role (or emph), at most one word in thread colour. Words rise in with a 3-frame stagger.",
+  "files": [],
+  "implementation": {
+    "kit_component": "Caption",
+    "props": {},
+    "deterministic_inputs": [
+      "scene.captions"
+    ]
+  },
+  "style": {
+    "roles": [
+      "caption-base",
+      "emph",
+      "thread",
+      "concept-1",
+      "concept-2",
+      "concept-3",
+      "concept-4",
+      "concept-5"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "cadence": "ones"
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27",
+    "reference": "Caption style of Philosophy of Everything + keyword colouring of GraduateML"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "typography"
+  ]
+}

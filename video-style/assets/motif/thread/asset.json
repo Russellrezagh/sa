@@ -1,0 +1,70 @@
+{
+  "id": "motif.thread",
+  "version": "1.0.0",
+  "kind": "motif",
+  "status": "published",
+  "title": "The Thread (mài)",
+  "description": "The primary motif: one continuous ink-blue line that IS the video's idea. It is rendered once at storyboard level and morphs between named paths at scene boundaries, so it never cuts.",
+  "files": [
+    {
+      "path": "paths.json",
+      "role": "spec"
+    }
+  ],
+  "implementation": {
+    "kit_component": "Thread",
+    "props": {
+      "width": 7,
+      "role": "thread"
+    },
+    "deterministic_inputs": [
+      "paths.json",
+      "scene.motif.state",
+      "meta.pulse.bpm"
+    ]
+  },
+  "style": {
+    "roles": [
+      "thread"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "cadence": "ones"
+  },
+  "states": [
+    "home",
+    "travel",
+    "underline",
+    "knot",
+    "pulse",
+    "carry",
+    "strip",
+    "absent"
+  ],
+  "usage": {
+    "do": [
+      "Give it one meaning per video and say it in motif.meaning",
+      "Let it physically connect consecutive scenes",
+      "Draw it on with ease.draw",
+      "Under VO, sync the pulse blip to meta.pulse.bpm"
+    ],
+    "dont": [
+      "Use thread colour for anything else except the single thread-word in a caption",
+      "Break it with a hard cut",
+      "Add a second line in thread colour"
+    ]
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27",
+    "reference": "Blue thread in AutoAE 'What is a good video? Ep.3 · Dunkirk'"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "motif",
+    "primary"
+  ]
+}

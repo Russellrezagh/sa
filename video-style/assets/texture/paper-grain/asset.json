@@ -1,0 +1,38 @@
+{
+  "id": "texture.paper-grain",
+  "version": "1.0.0",
+  "kind": "texture",
+  "status": "published",
+  "title": "Paper grain",
+  "description": "Static fractal-noise grain + soft vignette over the paper colour. SVG feTurbulence with a fixed seed: identical every frame and every render.",
+  "files": [],
+  "implementation": {
+    "kit_component": "Paper",
+    "props": {
+      "grain": "texture.paper-grain"
+    },
+    "deterministic_inputs": [
+      "meta.seed",
+      "tokens/texture.tokens.json"
+    ]
+  },
+  "style": {
+    "roles": [
+      "bg",
+      "bg-shade"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ]
+  },
+  "provenance": {
+    "source": "code",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "texture"
+  ]
+}

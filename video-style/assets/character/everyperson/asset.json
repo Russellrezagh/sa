@@ -1,0 +1,86 @@
+{
+  "id": "character.everyperson",
+  "version": "1.0.0",
+  "kind": "character",
+  "status": "published",
+  "title": "Everyperson",
+  "description": "The audience surrogate: round head, dot eyes, J-nose, t-shirt with pocket. Ink line + watercolour washes that deliberately miss the line. Poses are separate shape files merged onto base.json.",
+  "files": [
+    {
+      "path": "poses/base.json",
+      "role": "spec"
+    },
+    {
+      "path": "poses/neutral.json",
+      "role": "spec"
+    },
+    {
+      "path": "poses/point.json",
+      "role": "spec"
+    },
+    {
+      "path": "poses/shrug.json",
+      "role": "spec"
+    },
+    {
+      "path": "SHEET.md",
+      "role": "spec"
+    }
+  ],
+  "implementation": {
+    "kit_component": "InkShape",
+    "props": {
+      "shape": "character/everyperson/poses/base.json",
+      "pose": "neutral"
+    },
+    "deterministic_inputs": [
+      "shape files",
+      "element seed"
+    ]
+  },
+  "style": {
+    "roles": [
+      "ink",
+      "wash-skin",
+      "wash-cloth",
+      "concept-4",
+      "concept-3"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "line": "ink-line",
+    "fill": "watercolor",
+    "cadence": "twos"
+  },
+  "poses": [
+    "neutral",
+    "point",
+    "shrug"
+  ],
+  "expressions": [
+    "neutral"
+  ],
+  "usage": {
+    "do": [
+      "Place on stage optical centre (y≈0.38)",
+      "Change pose between scenes, not mid-scene"
+    ],
+    "dont": [
+      "Redraw freehand",
+      "Add new features without a version bump"
+    ]
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27",
+    "reference": "Character 'John' in Philosophy of Everything 'Who are you?' (re-designed, not traced)"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "character",
+    "cast"
+  ]
+}

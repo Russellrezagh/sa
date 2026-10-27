@@ -1,0 +1,47 @@
+{
+  "id": "icon.leaf",
+  "version": "1.0.0",
+  "kind": "icon",
+  "status": "published",
+  "title": "Leaf",
+  "description": "Leaf with veins; its midrib is drawn in thread colour (the mài).",
+  "files": [
+    {
+      "path": "shape.json",
+      "role": "source"
+    }
+  ],
+  "implementation": {
+    "kit_component": "InkShape",
+    "props": {
+      "shape": "icon/leaf/shape.json"
+    },
+    "deterministic_inputs": [
+      "shape.json",
+      "element seed"
+    ]
+  },
+  "style": {
+    "roles": [
+      "ink",
+      "concept-2",
+      "thread"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "line": "ink-line",
+    "fill": "watercolor",
+    "cadence": "twos"
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "icon"
+  ]
+}

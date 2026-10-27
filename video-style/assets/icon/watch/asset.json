@@ -1,0 +1,46 @@
+{
+  "id": "icon.watch",
+  "version": "1.0.0",
+  "kind": "icon",
+  "status": "published",
+  "title": "Watch",
+  "description": "Pocket-watch face; pair with the pulse.",
+  "files": [
+    {
+      "path": "shape.json",
+      "role": "source"
+    }
+  ],
+  "implementation": {
+    "kit_component": "InkShape",
+    "props": {
+      "shape": "icon/watch/shape.json"
+    },
+    "deterministic_inputs": [
+      "shape.json",
+      "element seed"
+    ]
+  },
+  "style": {
+    "roles": [
+      "ink",
+      "concept-4"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "line": "ink-line",
+    "fill": "watercolor",
+    "cadence": "twos"
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "icon"
+  ]
+}

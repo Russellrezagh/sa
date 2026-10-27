@@ -1,0 +1,15 @@
+{
+  "$description": "Procedural textures. Every texture is a pure function of (seed, params) so it renders identically every time.",
+  "texture": {
+    "paper-grain":  { "baseFrequency": 0.85, "octaves": 3, "opacity": 0.06, "animated": false },
+    "film-grain":   { "baseFrequency": 0.95, "octaves": 2, "opacity": 0.05, "animated": true, "step": 2, "use": "Tactile / stop-motion scenes only." },
+    "vignette":     { "strength": 0.10, "radius": 0.85 },
+    "watercolor":   { "bleed-px": 9, "edge-darken": 0.18, "opacity": 0.55, "turbulence": 0.012, "use": "Fill under ink lines; the fill deliberately misses the line by a few px." },
+    "ink-line":     { "width-px": 4, "cap": "round", "join": "round", "boil": true },
+    "halftone":     { "cell-px": 7, "angle-deg": 15, "use": "Treatment for photos/footage. Duotone: ink-or-thread on paper." },
+    "stipple":      { "density": 0.55, "dot-px": 1.6, "use": "Treatment for portraits; dissolves into particles on exit (Dunkirk reel)." },
+    "ascii":        { "charset": " .:-=/\\\\|#", "cell-px": 12, "font": "mono", "use": "Treatment for 'data' or 'hidden structure' moments." },
+    "halo":         { "radius-mult": 2.2, "opacity": 0.28, "use": "Soft glow ring behind key points (GraduateML reel)." },
+    "ripple":       { "rings": 2, "spacing-px": 46, "stroke-px": 1.5, "opacity": 0.45, "use": "Concentric rings from the motif when it is named (POE reel)." }
+  }
+}

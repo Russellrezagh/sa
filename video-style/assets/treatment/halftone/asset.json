@@ -1,0 +1,18 @@
+{
+  "id": "treatment.halftone",
+  "version": "1.0.0",
+  "kind": "treatment",
+  "status": "proposed",
+  "title": "Halftone / stipple treatment",
+  "description": "Mandatory treatment for any photo or footage: duotone (ink or thread on paper) dots. Proposed: not yet implemented in kit/. Until it is, run footage through ffmpeg (see ASSETS.md) and register the RESULT as a footage.* asset.",
+  "files": [],
+  "provenance": {
+    "source": "code",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "treatment"
+  ]
+}

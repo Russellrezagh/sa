@@ -1,0 +1,152 @@
+# Worked example and the kit's demo composition ("MaiDemo").
+# A 25-second, portrait, paper-mode explainer about the house style itself.
+# Lint:    python3 video-style/tools/lint_storyboard.py video-style/storyboards/give-it-a-thread.yaml
+# Compile: add  --emit video-style/kit/src/storyboards/give-it-a-thread.json
+meta:
+  id: give-it-a-thread
+  title: Give it a thread
+  format: portrait
+  fps: 30
+  mode: paper
+  seed: 7341
+  voice: { register: explainer }
+  pulse: { bpm: 70, asset: bed.pulse-70@1.0.0 }
+  fonts: [font.instrument-serif@1.0.0, font.inter@1.0.0, font.jetbrains-mono@1.0.0]
+
+motif:
+  asset: motif.thread@1.0.0
+  meaning: The one idea that connects every scene; here, literally the style's own rule.
+
+concepts:
+  - { name: line, role: concept-1 }
+  - { name: meaning, role: concept-4 }
+  - { name: viewer, role: concept-3 }
+
+cast: [character.everyperson@1.0.0]
+
+beats:
+  - id: hook
+    type: HOOK
+    scenes:
+      - id: hook-question
+        duration: 3.0
+        layout: center-subject
+        first_change: 0
+        header: "?"
+        vo: What holds a good video together?
+        captions:
+          - { text: What holds a video, at: 0.2, until: 1.5 }
+          - { text: "together?", at: 1.5, until: 2.9, emph: [{ word: together, role: emph }] }
+        motif: { state: travel, path: across }
+        transition_out: { type: carry }
+
+  - id: define
+    type: DEFINE
+    scenes:
+      - id: define-word
+        duration: 3.4
+        layout: payoff-word
+        vo: There's a Chinese word for it. Mài.
+        elements:
+          - { id: word, asset: template.caption@1.0.0, x: 0.5, y: 0.36, props: { setup: "a Chinese word:", payoff: "mài", payoffRole: thread } }
+        captions:
+          - { text: a Chinese word, at: 0.2, until: 1.6 }
+          - { text: mài, at: 1.7, until: 3.3, emph: [{ word: mài, role: thread }] }
+        motif: { state: underline, path: underline }
+        sfx: [{ asset: sfx.ripple-ping@1.0.0, at: 1.7 }]
+        transition_out: { type: carry }
+      - id: define-leaf
+        duration: 3.2
+        layout: center-subject
+        vo: The veins in a leaf. The thread through a story.
+        elements:
+          - { id: leaf, asset: icon.leaf@1.0.0, x: 0.5, y: 0.38, scale: 3.6, enter: draw }
+        captions:
+          - { text: veins in a leaf, at: 0.3, until: 1.6, emph: [{ word: veins, role: emph }] }
+          - { text: a story's thread, at: 1.7, until: 3.1, emph: [{ word: thread, role: thread }] }
+        motif: { state: travel, path: rib }
+        sfx: [{ asset: sfx.pencil@1.0.0, at: 0.2 }]
+        transition_out: { type: zoom-through, target: leaf }
+
+  - id: ladder
+    type: LADDER
+    scenes:
+      - id: rung-line
+        duration: 2.4
+        layout: ladder-stack
+        header: "a line"
+        vo: Draw a line, you get a path.
+        captions:
+          - { text: draw a line, at: 0.1, until: 1.1, emph: [{ word: line, role: concept-1 }] }
+          - { text: you get a path, at: 1.1, until: 2.3 }
+        motif: { state: travel, path: lead }
+        transition_out: { type: push }
+      - id: rung-meaning
+        duration: 2.6
+        layout: ladder-stack
+        header: "a line → a path"
+        breadcrumb: []
+        vo: Give the path a meaning, you get a thread.
+        elements:
+          - { id: watch, asset: icon.watch@1.0.0, x: 0.5, y: 0.30, scale: 1.4, enter: pop, role: concept-4 }
+        captions:
+          - { text: give it meaning, at: 0.1, until: 1.2, emph: [{ word: meaning, role: concept-4 }] }
+          - { text: you get a thread, at: 1.2, until: 2.5, emph: [{ word: thread, role: thread }] }
+        motif: { state: pulse, path: strip }
+        transition_out: { type: push }
+      - id: rung-viewer
+        duration: 2.8
+        layout: ladder-stack
+        header: "a path → a thread"
+        vo: Let someone follow it, you get a story.
+        elements:
+          - { id: person, asset: character.everyperson@1.0.0, x: 0.36, y: 0.40, scale: 1.25, pose: point, enter: draw }
+        captions:
+          - { text: let someone follow, at: 0.1, until: 1.3, emph: [{ word: someone, role: concept-3 }] }
+          - { text: you get a story, at: 1.3, until: 2.7, emph: [{ word: story, role: emph }] }
+        motif: { state: travel, path: lead }
+        transition_out: { type: wash }
+
+  - id: turn
+    type: TURN
+    scenes:
+      - id: strip
+        duration: 3.4
+        mode: night
+        layout: full-bleed-texture
+        vo: Take away the words. Take away the colour. It's still there.
+        captions:
+          - { text: take away the words, at: 0.1, until: 1.1 }
+          - { text: take away the colour, at: 1.1, until: 2.1 }
+          - { text: "still there.", at: 2.2, until: 3.3, emph: [{ word: there, role: thread }] }
+        motif: { state: pulse, path: strip }
+        transition_out: { type: wash }
+
+  - id: rule
+    type: RULE
+    scenes:
+      - id: rule-payoff
+        duration: 2.6
+        layout: payoff-word
+        vo: So give every video a thread.
+        elements:
+          - { id: rule-word, asset: template.caption@1.0.0, x: 0.5, y: 0.36, props: { setup: "so give every video a", payoff: "thread.", payoffRole: thread } }
+        captions:
+          - { text: give it a thread, at: 0.2, until: 2.5, emph: [{ word: thread, role: thread }] }
+        motif: { state: underline, path: underline }
+        transition_out: { type: carry }
+
+  - id: return
+    type: RETURN
+    scenes:
+      - id: return-loop
+        duration: 2.2
+        layout: center-subject
+        echoes: hook-question
+        header: "?"
+        vo: That's what holds it together.
+        captions:
+          - { text: "that's what holds it", at: 0.1, until: 1.1 }
+          - { text: "together.", at: 1.1, until: 2.1, emph: [{ word: together, role: emph }] }
+        motif: { state: travel, path: across }
+        transition_out: { type: end-loop }

@@ -1,0 +1,12 @@
+{
+  "id": "font.inter",
+  "version": "1.0.0",
+  "kind": "font",
+  "status": "published",
+  "title": "Inter (variable)",
+  "description": "Editorial sans for labels and setup/payoff pairs.",
+  "files": [{"path":"Inter-Variable.ttf","role":"font"},{"path":"OFL.txt","role":"license"}],
+  "provenance": { "source": "licensed", "author": "google/fonts repository (ofl/)", "created": "2026-10-27", "reference": "https://github.com/google/fonts" },
+  "license": "OFL-1.1",
+  "tags": ["typography"]
+}

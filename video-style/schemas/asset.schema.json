@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mai/asset.schema.json",
+  "title": "MAI Asset manifest (assets/**/asset.json)",
+  "type": "object",
+  "required": ["id", "version", "kind", "status", "title", "description", "files", "provenance", "license"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^(motif|character|prop|icon|texture|treatment|footage|font|sfx|bed|vo|template)\\.[a-z0-9][a-z0-9-]*$" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "kind": { "enum": ["motif", "character", "prop", "icon", "texture", "treatment", "footage", "font", "sfx", "bed", "vo", "template"] },
+    "status": { "enum": ["proposed", "drafted", "reviewed", "published", "deprecated"] },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "role"],
+        "additionalProperties": false,
+        "properties": {
+          "path": { "type": "string", "description": "Relative to this asset.json, or to video-style/ when it starts with '/'." },
+          "role": { "enum": ["source", "render", "reference", "license", "audio", "font", "spec"] },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Filled by tools/asset_lock.py; do not hand-edit." }
+        }
+      }
+    },
+    "implementation": {
+      "type": "object",
+      "description": "Procedural assets: the kit component that renders it and the props it takes. A procedural asset is still versioned: changing the component's look requires a version bump.",
+      "properties": {
+        "kit_component": { "type": "string" },
+        "props": { "type": "object" },
+        "deterministic_inputs": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "roles": { "type": "array", "items": { "type": "string" } },
+        "modes": { "type": "array", "items": { "enum": ["paper", "night"] } },
+        "line": { "type": "string" },
+        "fill": { "type": "string" },
+        "cadence": { "enum": ["ones", "twos"] }
+      },
+      "additionalProperties": false
+    },
+    "states": {
+      "type": "array",
+      "description": "Motif/character states a storyboard may request (e.g. home, travel, knot, pulse, absent).",
+      "items": { "type": "string" }
+    },
+    "poses": { "type": "array", "items": { "type": "string" } },
+    "expressions": { "type": "array", "items": { "type": "string" } },
+    "usage": {
+      "type": "object",
+      "properties": {
+        "do": { "type": "array", "items": { "type": "string" } },
+        "dont": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source", "author", "created"],
+      "additionalProperties": false,
+      "properties": {
+        "source": { "enum": ["hand-made", "code", "generated", "licensed", "recorded"] },
+        "author": { "type": "string" },
+        "created": { "type": "string" },
+        "tool": { "type": "string" },
+        "model": { "type": "string" },
+        "prompt": { "type": "string" },
+        "seed": { "type": "integer" },
+        "reference": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    },
+    "license": { "type": "string" },
+    "tags": { "type": "array", "items": { "type": "string" } }
+  }
+}

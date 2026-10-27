@@ -23,3 +23,7 @@ We are deeply grateful for the valuable code and efforts contributed by the foll
 
 
 
+
+## Video style system
+
+`video-style/` contains **MAI**, a house style plus a deterministic asset library and render kit for short explainer videos, built from an analysis of four reference reels. Start with `video-style/README.md`. The agent skill lives at `.claude/skills/mai-video/SKILL.md`.

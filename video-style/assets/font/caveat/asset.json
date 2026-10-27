@@ -1,0 +1,12 @@
+{
+  "id": "font.caveat",
+  "version": "1.0.0",
+  "kind": "font",
+  "status": "published",
+  "title": "Caveat (variable)",
+  "description": "Handwriting for marginalia only.",
+  "files": [{"path":"Caveat-Variable.ttf","role":"font"},{"path":"OFL.txt","role":"license"}],
+  "provenance": { "source": "licensed", "author": "google/fonts repository (ofl/)", "created": "2026-10-27", "reference": "https://github.com/google/fonts" },
+  "license": "OFL-1.1",
+  "tags": ["typography"]
+}

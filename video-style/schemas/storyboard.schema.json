@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mai/storyboard.schema.json",
+  "title": "MAI Storyboard (storyboards/*.yaml)",
+  "type": "object",
+  "required": ["meta", "motif", "concepts", "beats"],
+  "additionalProperties": false,
+  "$defs": {
+    "assetRef": { "type": "string", "pattern": "^[a-z]+\\.[a-z0-9-]+@\\d+\\.\\d+\\.\\d+$" },
+    "role": { "type": "string", "pattern": "^(ink|ink-soft|ink-dark|thread|caption-base|emph|concept-[1-5]|guide)$" },
+    "caption": {
+      "type": "object",
+      "required": ["text", "at", "until"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "at": { "type": "number", "minimum": 0, "description": "Seconds from scene start." },
+        "until": { "type": "number", "minimum": 0 },
+        "emph": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["word", "role"],
+            "additionalProperties": false,
+            "properties": { "word": { "type": "string" }, "role": { "$ref": "#/$defs/role" } }
+          }
+        }
+      }
+    },
+    "element": {
+      "type": "object",
+      "required": ["id", "asset"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "asset": { "$ref": "#/$defs/assetRef" },
+        "x": { "type": "number" }, "y": { "type": "number" }, "scale": { "type": "number" },
+        "role": { "$ref": "#/$defs/role" },
+        "pose": { "type": "string" },
+        "state": { "type": "string" },
+        "enter": { "type": "string" }, "exit": { "type": "string" },
+        "at": { "type": "number" },
+        "props": { "type": "object" }
+      }
+    },
+    "scene": {
+      "type": "object",
+      "required": ["id", "duration", "layout", "vo", "captions", "motif", "transition_out"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "duration": { "type": "number", "minimum": 0.5, "description": "Seconds." },
+        "mode": { "enum": ["paper", "night"] },
+        "layout": { "enum": ["center-subject", "ladder-stack", "editorial-grid", "split-compare", "diagram-axes", "payoff-word", "full-bleed-texture"] },
+        "header": { "type": "string" },
+        "breadcrumb": { "type": "array", "items": { "type": "string" } },
+        "vo": { "type": "string" },
+        "first_change": { "type": "number", "minimum": 0 },
+        "captions": { "type": "array", "items": { "$ref": "#/$defs/caption" } },
+        "elements": { "type": "array", "items": { "$ref": "#/$defs/element" } },
+        "motif": {
+          "type": "object",
+          "required": ["state"],
+          "additionalProperties": false,
+          "properties": {
+            "state": { "enum": ["home", "travel", "underline", "knot", "pulse", "carry", "strip", "absent"] },
+            "path": { "type": "string", "description": "Optional named path from the motif asset, or SVG path data in stage coords." }
+          }
+        },
+        "transition_out": {
+          "type": "object",
+          "required": ["type"],
+          "additionalProperties": false,
+          "properties": {
+            "type": { "enum": ["morph", "carry", "push", "draw-through", "zoom-through", "wash", "cut", "end-loop"] },
+            "target": { "type": "string", "description": "Element id that morphs / is zoomed into." }
+          }
+        },
+        "echoes": { "type": "string", "description": "RETURN scenes: id of the HOOK scene they call back to." },
+        "sfx": { "type": "array", "items": { "type": "object", "properties": { "asset": { "$ref": "#/$defs/assetRef" }, "at": { "type": "number" } }, "required": ["asset", "at"], "additionalProperties": false } },
+        "notes": { "type": "string" }
+      }
+    }
+  },
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["id", "title", "format", "fps", "mode", "seed", "voice", "pulse"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "title": { "type": "string" },
+        "format": { "enum": ["portrait", "landscape"] },
+        "fps": { "enum": [24, 25, 30, 60] },
+        "mode": { "enum": ["paper", "night"] },
+        "seed": { "type": "integer" },
+        "voice": {
+          "type": "object", "required": ["register"], "additionalProperties": false,
+          "properties": { "register": { "enum": ["contemplative", "explainer"] }, "asset": { "$ref": "#/$defs/assetRef" } }
+        },
+        "pulse": {
+          "type": "object", "required": ["bpm", "asset"], "additionalProperties": false,
+          "properties": { "bpm": { "type": "number", "minimum": 50, "maximum": 100 }, "asset": { "$ref": "#/$defs/assetRef" } }
+        },
+        "fonts": { "type": "array", "items": { "$ref": "#/$defs/assetRef" } }
+      }
+    },
+    "motif": {
+      "type": "object",
+      "required": ["asset", "meaning"],
+      "additionalProperties": false,
+      "properties": {
+        "asset": { "$ref": "#/$defs/assetRef" },
+        "meaning": { "type": "string", "description": "One sentence: what idea the thread IS in this video." }
+      }
+    },
+    "concepts": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object", "required": ["name", "role"], "additionalProperties": false,
+        "properties": { "name": { "type": "string" }, "role": { "type": "string", "pattern": "^concept-[1-5]$" }, "symbol": { "type": "string" } }
+      }
+    },
+    "cast": { "type": "array", "items": { "$ref": "#/$defs/assetRef" } },
+    "beats": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object", "required": ["id", "type", "scenes"], "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "enum": ["HOOK", "DEFINE", "LADDER", "TURN", "RULE", "RETURN"] },
+          "scenes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/scene" } }
+        }
+      }
+    }
+  }
+}

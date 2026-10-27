@@ -1,0 +1,55 @@
+{
+  "id": "motif.lens",
+  "version": "1.0.0",
+  "kind": "motif",
+  "status": "published",
+  "title": "The Lens (observer drop)",
+  "description": "Alternative primary motif for contemplative videos: a glassy drop that rests at motif-home and emits ripple rings when its idea is named. Use INSTEAD of the thread, never alongside it.",
+  "files": [],
+  "implementation": {
+    "kit_component": "Lens",
+    "props": {
+      "radius": 64
+    },
+    "deterministic_inputs": [
+      "seed",
+      "ripple times"
+    ]
+  },
+  "style": {
+    "roles": [
+      "bg-shade",
+      "concept-4",
+      "guide"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "cadence": "ones"
+  },
+  "states": [
+    "home",
+    "ripple",
+    "travel",
+    "absent"
+  ],
+  "usage": {
+    "do": [
+      "Ripple exactly when the idea is named (pair with sfx.ripple-ping)"
+    ],
+    "dont": [
+      "Use with motif.thread in the same video"
+    ]
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27",
+    "reference": "Glass drop motif in Philosophy of Everything 'Who are you?'"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "motif"
+  ]
+}

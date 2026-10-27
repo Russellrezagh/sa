@@ -1,0 +1,123 @@
+{
+ "file": null,
+ "size": [
+  1916,
+  1078
+ ],
+ "duration_s": 44.0,
+ "palette": [
+  {
+   "hex": "#f4f2f3",
+   "share": 0.679
+  },
+  {
+   "hex": "#022da5",
+   "share": 0.14
+  },
+  {
+   "hex": "#dde0e7",
+   "share": 0.056
+  },
+  {
+   "hex": "#bbc3d6",
+   "share": 0.032
+  },
+  {
+   "hex": "#8ea1cd",
+   "share": 0.025
+  },
+  {
+   "hex": "#5370bc",
+   "share": 0.017
+  },
+  {
+   "hex": "#aba9ac",
+   "share": 0.014
+  },
+  {
+   "hex": "#5e5e63",
+   "share": 0.014
+  },
+  {
+   "hex": "#89898c",
+   "share": 0.014
+  },
+  {
+   "hex": "#2f3039",
+   "share": 0.009
+  }
+ ],
+ "mean_luminance": 202.5,
+ "mean_saturation": 0.114,
+ "motion_energy_mean": 11.65,
+ "motion_energy_p90": 19.21,
+ "motion_energy_per_second": [
+  46.6,
+  6.2,
+  1.6,
+  42.4,
+  1.1,
+  22.8,
+  2.9,
+  27.0,
+  36.3,
+  5.2,
+  11.4,
+  8.0,
+  32.5,
+  36.0,
+  10.8,
+  9.0,
+  5.1,
+  4.6,
+  10.0,
+  0.2,
+  6.2,
+  3.6,
+  5.7,
+  2.8,
+  0.6,
+  11.8,
+  0.5,
+  9.1,
+  8.2,
+  12.5,
+  3.4,
+  3.7,
+  1.5,
+  10.3,
+  43.2,
+  16.7,
+  32.4,
+  7.5,
+  1.4,
+  3.6,
+  4.2,
+  0.2,
+  1.1,
+  0.0
+ ],
+ "tempo_bpm": 123.0,
+ "onsets_per_second": 4.2,
+ "rms_db_mean": -17.7,
+ "rms_dynamic_range_db": 15.1,
+ "source_url": "https://www.instagram.com/reel/De9SYDwhTG0/",
+ "hard_cuts_scene_gt_0_3": 11,
+ "cut_times_s": [
+  3.54167,
+  5.75,
+  7.625,
+  8.33333,
+  12.8333,
+  12.9583,
+  13.3333,
+  13.4167,
+  34.5417,
+  36.0833,
+  36.1667
+ ],
+ "vo_words": 120,
+ "vo_wpm": 175,
+ "vo_pauses_gt_0_6s": 4,
+ "note": "Measured by tools/analyze_reference.py. Media is not redistributed; re-download to re-measure."
+}

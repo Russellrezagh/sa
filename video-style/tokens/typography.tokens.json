@@ -1,0 +1,139 @@
+{
+  "$description": "Type system. Sizes are px at 1080 px frame width; scale linearly with width. All fonts are vendored in assets/fonts (OFL) and must never be loaded from a CDN at render time.",
+  "font": {
+    "family": {
+      "display": {
+        "$type": "fontFamily",
+        "$value": "Instrument Serif",
+        "$description": "Italic for captions and headlines (merges the POE caption serif with the AutoAE condensed italic)."
+      },
+      "sans": {
+        "$type": "fontFamily",
+        "$value": "Inter",
+        "$description": "Editorial labels and the small-setup / big-payoff pairs (from the Dunkirk reel)."
+      },
+      "mono": {
+        "$type": "fontFamily",
+        "$value": "JetBrains Mono",
+        "$description": "Tracking-box coordinates, data and code."
+      },
+      "hand": {
+        "$type": "fontFamily",
+        "$value": "Caveat",
+        "$description": "Marginalia and handwritten asides only (from the AutoAE marker notes). At most 1 per scene."
+      },
+      "math": {
+        "$type": "fontFamily",
+        "$value": "KaTeX_Main",
+        "$description": "Equations only; rendered with KaTeX (from the GraduateML reel)."
+      }
+    },
+    "size": {
+      "caption": {
+        "$type": "dimension",
+        "$value": "68px"
+      },
+      "headline": {
+        "$type": "dimension",
+        "$value": "96px"
+      },
+      "payoff": {
+        "$type": "dimension",
+        "$value": "168px",
+        "$description": "Big word in a setup/payoff pair."
+      },
+      "setup": {
+        "$type": "dimension",
+        "$value": "34px",
+        "$description": "Small lead-in line above a payoff."
+      },
+      "header": {
+        "$type": "dimension",
+        "$value": "56px"
+      },
+      "label": {
+        "$type": "dimension",
+        "$value": "28px"
+      },
+      "mono": {
+        "$type": "dimension",
+        "$value": "22px"
+      },
+      "breadcrumb": {
+        "$type": "dimension",
+        "$value": "30px"
+      }
+    },
+    "style": {
+      "caption": {
+        "family": "display",
+        "style": "italic",
+        "weight": 400,
+        "lineHeight": 1.08,
+        "letterSpacing": "-0.01em"
+      },
+      "headline": {
+        "family": "display",
+        "style": "italic",
+        "weight": 400,
+        "lineHeight": 1.0,
+        "letterSpacing": "-0.015em"
+      },
+      "payoff": {
+        "family": "sans",
+        "style": "normal",
+        "weight": 600,
+        "lineHeight": 0.95,
+        "letterSpacing": "-0.035em"
+      },
+      "setup": {
+        "family": "sans",
+        "style": "normal",
+        "weight": 500,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.005em"
+      },
+      "label": {
+        "family": "sans",
+        "style": "normal",
+        "weight": 500,
+        "lineHeight": 1.2,
+        "letterSpacing": "0"
+      },
+      "mono": {
+        "family": "mono",
+        "style": "normal",
+        "weight": 500,
+        "lineHeight": 1.2,
+        "letterSpacing": "0"
+      },
+      "breadcrumb": {
+        "family": "display",
+        "style": "italic",
+        "weight": 400,
+        "lineHeight": 1.0,
+        "letterSpacing": "0",
+        "decoration": "line-through"
+      }
+    },
+    "rules": {
+      "caption-max-words": {
+        "$type": "number",
+        "$value": 4
+      },
+      "caption-max-chars": {
+        "$type": "number",
+        "$value": 28
+      },
+      "families-per-frame-max": {
+        "$type": "number",
+        "$value": 2,
+        "$description": "Math is not counted."
+      },
+      "payoff-to-setup-ratio-min": {
+        "$type": "number",
+        "$value": 4
+      }
+    }
+  }
+}

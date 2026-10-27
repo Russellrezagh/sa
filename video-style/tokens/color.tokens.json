@@ -1,0 +1,184 @@
+{
+  "$description": "Colour roles for the MAI style. Content picks a ROLE, never a hex. Values are measured from the reference reels (see analysis/REFERENCE_ANALYSIS.md) and tuned so text meets WCAG AA on its background.",
+  "color": {
+    "paper": {
+      "$description": "Default light mode: warm paper (from the Philosophy-of-Everything reel, #ede9dc measured) plus Klein-blue thread (from the AutoAE Dunkirk reel, #002ca5 measured).",
+      "bg": {
+        "$type": "color",
+        "$value": "#EDE9DC"
+      },
+      "bg-shade": {
+        "$type": "color",
+        "$value": "#E5DCC8"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": "#1F1D1A"
+      },
+      "ink-soft": {
+        "$type": "color",
+        "$value": "#5A564E"
+      },
+      "guide": {
+        "$type": "color",
+        "$value": "#B0B4AA"
+      },
+      "thread": {
+        "$type": "color",
+        "$value": "#0B2FA6",
+        "$description": "THE motif colour. Only the thread and the single thread-word per scene use it."
+      },
+      "caption-base": {
+        "$type": "color",
+        "$value": "#2E5653"
+      },
+      "emph": {
+        "$type": "color",
+        "$value": "#A8432C"
+      },
+      "concept-1": {
+        "$type": "color",
+        "$value": "#3F6A9A",
+        "$description": "e.g. prediction / self / subject"
+      },
+      "concept-2": {
+        "$type": "color",
+        "$value": "#4F7F52",
+        "$description": "e.g. truth / target / world"
+      },
+      "concept-3": {
+        "$type": "color",
+        "$value": "#B8432E",
+        "$description": "e.g. error / cost / conflict"
+      },
+      "concept-4": {
+        "$type": "color",
+        "$value": "#97650E",
+        "$description": "e.g. energy / change / gradient"
+      },
+      "concept-5": {
+        "$type": "color",
+        "$value": "#6E4A7A",
+        "$description": "e.g. structure / model / memory"
+      },
+      "wash-skin": {
+        "$type": "color",
+        "$value": "#EABB8D"
+      },
+      "wash-cloth": {
+        "$type": "color",
+        "$value": "#A9BDB8"
+      },
+      "highlight": {
+        "$type": "color",
+        "$value": "#FFFDF7",
+        "$description": "Specular highlights on glassy objects only."
+      },
+      "ink-dark": {
+        "$type": "color",
+        "$value": "#1F1D1A",
+        "$description": "Mode-invariant dark: features drawn ON a wash (eyes, pupils) so a character reads the same in both modes."
+      }
+    },
+    "night": {
+      "$description": "Dark mode for diagram-heavy or 'strip' beats (from the GraduateML reel, #090f13 measured). Skin/cloth washes keep paper-mode lightness so characters stay recognisable across modes.",
+      "bg": {
+        "$type": "color",
+        "$value": "#0A0F14"
+      },
+      "bg-shade": {
+        "$type": "color",
+        "$value": "#141B22"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": "#E9E5D8"
+      },
+      "ink-soft": {
+        "$type": "color",
+        "$value": "#9AA3A8"
+      },
+      "guide": {
+        "$type": "color",
+        "$value": "#3A4650"
+      },
+      "thread": {
+        "$type": "color",
+        "$value": "#6E8BFF"
+      },
+      "caption-base": {
+        "$type": "color",
+        "$value": "#CFE3DF"
+      },
+      "emph": {
+        "$type": "color",
+        "$value": "#F0805F"
+      },
+      "concept-1": {
+        "$type": "color",
+        "$value": "#4A98EA"
+      },
+      "concept-2": {
+        "$type": "color",
+        "$value": "#4DB565"
+      },
+      "concept-3": {
+        "$type": "color",
+        "$value": "#E2614A"
+      },
+      "concept-4": {
+        "$type": "color",
+        "$value": "#F2A33A"
+      },
+      "concept-5": {
+        "$type": "color",
+        "$value": "#B48CE0"
+      },
+      "wash-skin": {
+        "$type": "color",
+        "$value": "#E8B992"
+      },
+      "wash-cloth": {
+        "$type": "color",
+        "$value": "#A7BCB7"
+      },
+      "highlight": {
+        "$type": "color",
+        "$value": "#F4F1E8"
+      },
+      "ink-dark": {
+        "$type": "color",
+        "$value": "#1F1D1A",
+        "$description": "Mode-invariant dark: features drawn ON a wash (eyes, pupils) so a character reads the same in both modes."
+      }
+    },
+    "rules": {
+      "$description": "Machine-checkable colour budget (enforced by tools/lint_storyboard.py).",
+      "max-concept-roles-per-video": {
+        "$type": "number",
+        "$value": 5
+      },
+      "max-accent-roles-per-scene": {
+        "$type": "number",
+        "$value": 3
+      },
+      "thread-words-per-scene-max": {
+        "$type": "number",
+        "$value": 1
+      },
+      "wash-opacity": {
+        "$type": "number",
+        "$value": 0.55
+      },
+      "halo-opacity": {
+        "$type": "number",
+        "$value": 0.28
+      },
+      "wash-opacity-night": {
+        "$type": "number",
+        "$value": 0.9,
+        "$description": "Washes sit on a dark ground, so they need more opacity to keep the same perceived colour."
+      }
+    }
+  }
+}
