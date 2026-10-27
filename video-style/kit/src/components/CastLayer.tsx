@@ -2,7 +2,7 @@ import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {resolveAsset} from '../assetRegistry';
 import {onTwos, seedFor} from '../determinism';
-import {dialogueMotion, dur, ease, transitionFrames, type Mode} from '../tokens';
+import {dialogueMotion, dur, ease, transitionFrames, unit, type Mode} from '../tokens';
 import type {Board, CastState, Scene} from '../types';
 import {InkShape} from './InkShape';
 
@@ -51,8 +51,8 @@ export const CastLayer: React.FC<{board: Board; scenes: Scene[]; idx: number; t:
 				const draw = b && firstEver ? interpolate(t, [0, dur('slow', fps) * 2], [0, 1], {...clamp, easing: ease('draw')}) : 1;
 				const opacity = !a && b && !firstEver ? m : a && !b ? 1 - m : 1;
 				const talk = speaking(cur, spk.id, t, fps);
-				const bob = -talk * dialogueMotion.bobPx * (width / 1080) * Math.abs(Math.sin((onTwos(frame) / fps) * Math.PI * dialogueMotion.bobHz));
-				const px = (sc * width) / 1080;
+				const bob = -talk * dialogueMotion.bobPx * unit(width, height) * Math.abs(Math.sin((onTwos(frame) / fps) * Math.PI * dialogueMotion.bobHz));
+				const px = sc * unit(width, height);
 				const poseA = A.pose ?? 'neutral';
 				const poseB = B.pose ?? poseA;
 				const seed = seedFor(board.meta.seed, `cast/${spk.id}`);

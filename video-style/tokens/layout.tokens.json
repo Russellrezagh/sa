@@ -2,33 +2,118 @@
   "$description": "Layout zones as fractions of frame width (x) / height (y). Portrait 9:16 is primary; landscape 16:9 is secondary.",
   "layout": {
     "portrait": {
-      "size": { "$type": "dimension", "$value": [1080, 1920] },
-      "margin-x": { "$type": "number", "$value": 0.06 },
-      "zone": {
-        "header":  { "y0": 0.07, "y1": 0.17, "use": "Equation / question / breadcrumb (persistent across a beat)." },
-        "stage":   { "y0": 0.18, "y1": 0.58, "use": "The drawing. The subject's optical centre sits at y≈0.38." },
-        "caption": { "y0": 0.60, "y1": 0.67, "use": "One caption line, centred." },
-        "quiet":   { "y0": 0.67, "y1": 0.78, "use": "Paper only; overflow for payoff words." },
-        "safe-bottom": { "y0": 0.78, "y1": 1.0, "use": "Platform UI; nothing important." },
-        "safe-right":  { "x0": 0.88, "x1": 1.0, "y0": 0.45, "y1": 1.0, "use": "Like/comment buttons." }
+      "size": {
+        "$type": "dimension",
+        "$value": [
+          1080,
+          1920
+        ]
       },
-      "motif-home": { "x": 0.80, "y": 0.11 }
+      "margin-x": {
+        "$type": "number",
+        "$value": 0.06
+      },
+      "zone": {
+        "header": {
+          "y0": 0.07,
+          "y1": 0.17,
+          "use": "Equation / question / breadcrumb (persistent across a beat)."
+        },
+        "stage": {
+          "y0": 0.18,
+          "y1": 0.58,
+          "use": "The drawing. The subject's optical centre sits at y≈0.38."
+        },
+        "caption": {
+          "y0": 0.6,
+          "y1": 0.67,
+          "use": "One caption line, centred."
+        },
+        "quiet": {
+          "y0": 0.67,
+          "y1": 0.78,
+          "use": "Paper only; overflow for payoff words."
+        },
+        "safe-bottom": {
+          "y0": 0.78,
+          "y1": 1.0,
+          "use": "Platform UI; nothing important."
+        },
+        "safe-right": {
+          "x0": 0.88,
+          "x1": 1.0,
+          "y0": 0.45,
+          "y1": 1.0,
+          "use": "Like/comment buttons."
+        }
+      },
+      "motif-home": {
+        "x": 0.8,
+        "y": 0.11
+      },
+      "pulse-y": {
+        "$type": "number",
+        "$value": 0.38,
+        "$description": "Height of the thread's pulse line in pulse/strip states."
+      }
     },
     "landscape": {
-      "size": { "$type": "dimension", "$value": [1920, 1080] },
-      "margin-x": { "$type": "number", "$value": 0.0625 },
-      "zone": {
-        "header":  { "y0": 0.05, "y1": 0.15 },
-        "stage":   { "y0": 0.16, "y1": 0.78 },
-        "caption": { "y0": 0.80, "y1": 0.90 },
-        "safe-bottom": { "y0": 0.93, "y1": 1.0 }
+      "size": {
+        "$type": "dimension",
+        "$value": [
+          1920,
+          1080
+        ]
       },
-      "motif-home": { "x": 0.88, "y": 0.12 }
+      "margin-x": {
+        "$type": "number",
+        "$value": 0.0625
+      },
+      "zone": {
+        "header": {
+          "y0": 0.05,
+          "y1": 0.15
+        },
+        "stage": {
+          "y0": 0.16,
+          "y1": 0.78
+        },
+        "caption": {
+          "y0": 0.8,
+          "y1": 0.9
+        },
+        "safe-bottom": {
+          "y0": 0.93,
+          "y1": 1.0
+        }
+      },
+      "motif-home": {
+        "x": 0.88,
+        "y": 0.12
+      },
+      "pulse-y": {
+        "$type": "number",
+        "$value": 0.795,
+        "$description": "At the learner's feet, above the captions: the cast stands on the pulse and it never crosses a chart."
+      }
     },
     "grid": {
-      "columns": { "$type": "number", "$value": 6 },
-      "guides-visible": { "$type": "boolean", "$value": false, "$description": "Set true in 'editorial' scenes: dashed guides + corner crosshairs (from the Dunkirk reel)." },
-      "guide-dash": { "$type": "dimension", "$value": [6, 8] }
+      "columns": {
+        "$type": "number",
+        "$value": 6
+      },
+      "guides-visible": {
+        "$type": "boolean",
+        "$value": false,
+        "$description": "Set true in 'editorial' scenes: dashed guides + corner crosshairs (from the Dunkirk reel)."
+      },
+      "guide-dash": {
+        "$type": "dimension",
+        "$value": [
+          6,
+          8
+        ]
+      }
     }
   }
 }

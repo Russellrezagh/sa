@@ -49,8 +49,8 @@
       },
       "scene-max-dialogue": {
         "$type": "number",
-        "$value": 210,
-        "$description": "Two-voice scenes run longer; N4 (a visible change every ≤ 2.5 s) still applies."
+        "$value": 300,
+        "$description": "Two-voice scenes: one max-length guide line (24 words ≈ 8 s) plus a short learner reply. N4 (a visible change every ≤ 2.5 s) still applies."
       }
     },
     "ease": {

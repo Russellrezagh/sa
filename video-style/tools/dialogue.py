@@ -85,19 +85,42 @@ def synth_line(board_id, spk, text):
     vref = spk["voice"]
     ls = spk.get("length_scale", manifest(vref)["implementation"]["props"]["length_scale"])
     key = sha(f"{vref}|{ls}|{text}".encode())[:16]
-    path = ROOT / "assets" / "vo" / board_id / "lines" / f"{spk['id']}-{key}.wav"
+    path = ROOT / "assets" / "vo" / board_id / "lines" / f"{spk['id']}-{key}.flac"
     if not path.exists():
         chunks = voice(vref).synthesize(text, syn_config=SynthesisConfig(length_scale=ls))
         audio = np.concatenate([c.audio_float_array for c in chunks]).astype(np.float32)
         path.parent.mkdir(parents=True, exist_ok=True)
-        sf.write(path, trim(audio), SR, subtype="PCM_16")
+        sf.write(path, trim(audio), SR, format="FLAC", subtype="PCM_16")
         print(f"  synthesised {path.relative_to(ROOT)}")
     y, _ = sf.read(path, dtype="float32")
     return path, y
 
 
-def syllables(word):
-    return max(1, len(re.findall(r"[aeiouy]+", word.lower())))
+def syllables(word, spelled=frozenset()):
+    """Rough spoken length of a caption word. Letter strings that `say` spells out ("abc" → "A B C"),
+    acronyms (GPT) and digits are spoken letter by letter / number by number."""
+    core = re.sub(r"[^\w]", "", word)
+    if core and core.upper() in spelled:
+        return len(core)
+    n = len(re.findall(r"[aeiouy]+", re.sub(r"[^a-z]", " ", word.lower())))
+    n += sum(len(a) for a in re.findall(r"[A-Z]{2,}", word))          # acronyms: G-P-T
+    n += 2 * len(re.findall(r"\d+", word))                            # numbers: ~2 syllables each
+    return max(1, n)
+
+
+def spelled_runs(say):
+    """Runs of single capital letters in the spoken text: "A B C" → "ABC", "I I, J J, K K" → "IIJJKK"."""
+    runs, cur = set(), ""
+    for tok in re.findall(r"[A-Za-z]+|[.!?]", say or ""):  # commas may sit inside a run ("I I, J J"); full stops end it
+        if len(tok) == 1 and tok.isupper():
+            cur += tok
+        else:
+            if len(cur) >= 2:
+                runs.add(cur)
+            cur = ""
+    if len(cur) >= 2:
+        runs.add(cur)
+    return frozenset(runs)
 
 
 def chunk(words):
@@ -156,7 +179,8 @@ def speech_clock(y, hop=0.01, min_pause=0.12):
 def captions_for(line, at, y, turn):
     words = line["text"].split()
     cards = chunk(words)
-    weights = [sum(syllables(w) for w in c) for c in cards]
+    sp = spelled_runs(line.get("say"))
+    weights = [sum(syllables(w, sp) for w in c) for c in cards]
     total = sum(weights)
     speech, to_real = speech_clock(y)
     dur = len(y) / SR
@@ -180,14 +204,61 @@ def captions_for(line, at, y, turn):
         if i:
             cap["at"] = max(cap["at"], merged[i - 1]["until"])
         cap["until"] = round(max(cap["until"], cap["at"] + HOLD + 0.01), 2)
+    pending = list(line.get("emph", []))  # each emphasis colours its FIRST occurrence only (M2: one thread-word)
     for cap in merged:
-        lw = [w.lower().strip(".,?!…") for w in cap["text"].split()]
-        em = [e for e in line.get("emph", []) if e["word"].lower().strip(".,?!…") in lw]
+        lw = [w.lower().strip(".,?!…:;") for w in cap["text"].split()]
+        em = [e for e in pending if e["word"].lower().strip(".,?!…:;") in lw]
         if em:
             cap["emph"] = em
+            pending = [e for e in pending if e not in em]
     if turn:
         merged[0]["turn"] = True
     return merged
+
+
+ANCHOR = re.compile(r"^@(\d+)(?::([^+\-$]+)|(\$))?([+-]\d+(?:\.\d+)?)?$")
+
+
+def word_times(text, at, y, say=None):
+    """Spoken start time of every word in a frozen line (same speech-only clock as the captions)."""
+    words = text.split()
+    sp = spelled_runs(say)
+    weights = [syllables(w, sp) for w in words]
+    total = sum(weights)
+    speech, to_real = speech_clock(y)
+    out, acc = [], 0
+    for w, wgt in zip(words, weights):
+        out.append((re.sub(r"[^\w']", "", w.lower()), at + to_real(speech * acc / total)))
+        acc += wgt
+    return out
+
+
+def resolve_anchors(obj, timeline, where):
+    """Replace "@<line>[:<word>|$][±s]" strings with seconds, so visual events land on the spoken word."""
+    if isinstance(obj, dict):
+        return {k: resolve_anchors(v, timeline, where) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [resolve_anchors(v, timeline, where) for v in obj]
+    if isinstance(obj, str) and obj.startswith("@"):
+        m = ANCHOR.match(obj)
+        if not m:
+            sys.exit(f"{where}: bad anchor {obj!r} (use @1, @1:word, @1$, with optional +0.3)")
+        i, word, end, off = int(m.group(1)), m.group(2), m.group(3), float(m.group(4) or 0)
+        if i >= len(timeline):
+            sys.exit(f"{where}: anchor {obj!r} points past the last line")
+        start, stop, words = timeline[i]
+        if end:
+            t = stop
+        elif word:
+            key = re.sub(r"[^\w']", "", word.lower())
+            hits = [wt for w, wt in words if w == key] or [wt for w, wt in words if w.startswith(key)]
+            if not hits:
+                sys.exit(f"{where}: anchor word {word!r} not in line {i}")
+            t = hits[0]
+        else:
+            t = start
+        return round(max(0.0, t + off), 2)
+    return obj
 
 
 def main(path):
@@ -207,6 +278,7 @@ def main(path):
             lines = s.get("lines") or []
             t = DIALOGUE["scene-lead-in-s"]
             caps = []
+            timeline = []
             prev_line = None
             for ln in lines:
                 if ln["speaker"] not in spk:
@@ -222,9 +294,14 @@ def main(path):
                 is_guide = spk[ln["speaker"]]["role"] == "guide"
                 turn = is_guide and (prev_speaker is None or spk[prev_speaker]["role"] != "guide" or first_in_beat)
                 caps += captions_for(ln, t, y, turn)
+                timeline.append((t, t + d, word_times(ln["text"], t, y, ln.get("say"))))
                 placements.append((scene_start + t, y))
                 prev_line, prev_speaker, first_in_beat = ln, ln["speaker"], False
                 t += d
+            if timeline:
+                for key in ("elements", "sfx"):
+                    if key in s:
+                        s[key] = resolve_anchors(s[key], timeline, s["id"])
             if lines:
                 need = t + DIALOGUE["scene-tail-s"]
                 s["duration"] = round(max(s.get("duration", 0), need), 2)
@@ -244,13 +321,18 @@ def main(path):
     if peak > 0.84:
         total *= 0.84 / peak
     vdir = ROOT / "assets" / "vo" / bid
-    wav = vdir / "dialogue.wav"
-    sf.write(wav, total.astype(np.float32), SR, subtype="PCM_16")
-    lines_files = sorted({p for p in (vdir / "lines").glob("*.wav")})
+    wav = vdir / "dialogue.flac"
+    sf.write(wav, total.astype(np.float32), SR, format="FLAC", subtype="PCM_16")
+    lines_files = sorted({p for p in (vdir / "lines").glob("*.flac")} | {p for p in (vdir / "lines").glob("*.wav")})
     used = {str((ROOT / "assets" / l["audio"]).resolve()) for b in out["beats"] for s in b["scenes"] for l in s.get("lines") or []}
     for p in lines_files:
         if str(p.resolve()) not in used:
-            print(f"  note: {p.relative_to(ROOT)} is no longer used by the script (kept; delete it if intended)")
+            if "--prune" in sys.argv:
+                p.unlink()
+                print(f"  pruned {p.relative_to(ROOT)} (no longer in the script)")
+            else:
+                print(f"  note: {p.relative_to(ROOT)} is no longer used by the script (kept; pass --prune to delete)")
+    lines_files = [p for p in lines_files if p.exists()]
     mf = vdir / "asset.json"
     old = json.loads(mf.read_text()) if mf.exists() else None
     version = old["version"] if old else "1.0.0"
@@ -264,7 +346,7 @@ def main(path):
         "id": f"vo.{bid}", "version": version, "kind": "vo", "status": "published",
         "title": f"Dialogue VO: {board['meta']['title']}",
         "description": f"Two-voice dialogue ({dlg['mode']} mode) generated by tools/dialogue.py; mixed and normalised to {DIALOGUE['vo-lufs']} LUFS. Lines are frozen individually under lines/.",
-        "files": [{"path": "dialogue.wav", "role": "audio"}] + [{"path": f"lines/{p.name}", "role": "source"} for p in lines_files if str(p.resolve()) in used],
+        "files": [{"path": wav.name, "role": "audio"}] + [{"path": f"lines/{p.name}", "role": "source"} for p in lines_files if str(p.resolve()) in used],
         "provenance": {"source": "generated", "author": "tools/dialogue.py", "created": "2026-10-27", "tool": "piper-tts",
                        "model": ", ".join(f"{s['id']}={s['voice']}" for s in dlg["speakers"]),
                        "prompt": "storyboard lines (see storyboards/" + src.name + ")",
@@ -284,4 +366,4 @@ def main(path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(next(a for a in sys.argv[1:] if not a.startswith("--")))

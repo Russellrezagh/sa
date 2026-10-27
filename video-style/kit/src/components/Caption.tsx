@@ -4,7 +4,7 @@ import typeJson from '../../../tokens/typography.tokens.json';
 import type {Caption as CaptionT} from '../types';
 import {cadence, color, dur, ease, textStyle, type Mode, type Role} from '../tokens';
 
-const norm = (w: string) => w.toLowerCase().replace(/[.,?!…:]/g, '');
+const norm = (w: string) => w.toLowerCase().replace(/[.,?!…:;]/g, '');
 const marker = typeJson.font['turn-marker'];
 
 /**
@@ -14,7 +14,8 @@ const marker = typeJson.font['turn-marker'];
  */
 export const Caption: React.FC<{caption: CaptionT; mode: Mode; y: number; speakerRole?: 'guide' | 'learner'}> = ({caption, mode, y, speakerRole}) => {
 	const frame = useCurrentFrame();
-	const {fps, width} = useVideoConfig();
+	const {fps, width, height} = useVideoConfig();
+	const short = Math.min(width, height);
 	const start = Math.round(caption.at * fps);
 	const end = Math.round(caption.until * fps);
 	const quick = dur('quick', fps);
@@ -24,7 +25,7 @@ export const Caption: React.FC<{caption: CaptionT; mode: Mode; y: number; speake
 	const emph = new Map((caption.emph ?? []).map((e) => [norm(e.word), e.role]));
 	const words = caption.text.split(' ');
 	const learner = speakerRole === 'learner';
-	const base = learner ? textStyle('caption-learner', width) : textStyle('caption', width);
+	const base = learner ? textStyle('caption-learner', short) : textStyle('caption', short);
 	return (
 		<div
 			style={{
@@ -45,7 +46,7 @@ export const Caption: React.FC<{caption: CaptionT; mode: Mode; y: number; speake
 			{words.map((w, i) => {
 				const t0 = start + i * stagger;
 				const p = interpolate(frame, [t0, t0 + quick], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: ease('enter')});
-				const role = emph.get(norm(w));
+				const role = words.findIndex((x) => norm(x) === norm(w)) === i ? emph.get(norm(w)) : undefined;
 				return (
 					<span
 						key={i}

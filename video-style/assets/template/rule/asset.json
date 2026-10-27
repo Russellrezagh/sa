@@ -1,0 +1,40 @@
+{
+  "id": "template.rule",
+  "version": "1.0.0",
+  "kind": "template",
+  "status": "published",
+  "title": "Rule card",
+  "description": "A model's or a person's stated rule, stamped correct-intended / correct-unintended / incorrect.",
+  "files": [],
+  "implementation": {
+    "kit_component": "diagrams/rule",
+    "props": {},
+    "deterministic_inputs": [
+      "element props",
+      "element seed",
+      "local frame"
+    ]
+  },
+  "style": {
+    "roles": [
+      "ink",
+      "concept-5",
+      "emph"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "cadence": "ones"
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27",
+    "reference": "Built for the 'analogy → ARC' explainer (Mitchell et al. papers)"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "diagram"
+  ]
+}

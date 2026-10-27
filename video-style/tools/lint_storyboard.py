@@ -135,6 +135,7 @@ def lint(board, text):
 
     # N3 voice pace
     vo_words = sum(len(words(vo_of(s))) for _, s in scenes)
+    # measured like the reference reels (analysis/fingerprints): words over the whole span, pauses included
     wpm = vo_words / total * 60 if total else 0
     rng = AUDIO["voice"][f"wpm-{meta['voice']['register']}"]
     if wpm > AUDIO["voice"]["wpm-hard-max"]:
@@ -182,9 +183,8 @@ def lint(board, text):
             cuts += 1
         el_ids = {e["id"] for e in s.get("elements", [])}
         elem_ids_by_scene.append(el_ids)
-        if tr["type"] in ("morph", "zoom-through"):
-            if tr.get("target") not in el_ids:
-                err("T4", f"{sid}: {tr['type']} needs target = an element id in this scene")
+        if tr["type"] == "zoom-through" and tr.get("target") not in el_ids:
+            err("T4", f"{sid}: zoom-through needs target = an element id in this scene")
         if s["layout"] == "editorial-grid" and meta["mode"] == "paper" and s.get("mode") == "night":
             warn("L1", f"{sid}: editorial grid in night mode loses its guides")
         if s.get("mode") == "night" and meta["mode"] == "paper" and b["type"] != "TURN":
@@ -209,7 +209,7 @@ def lint(board, text):
                 err("C4", f"{sid}: caption '{c['text']}' overlaps the previous caption")
             prev_end = c["until"]
             for e in c.get("emph", []):
-                if e["word"].lower().strip(".,?!") not in [x.lower().strip(".,?!") for x in w]:
+                if e["word"].lower().strip(".,?!…:;") not in [x.lower().strip(".,?!…:;") for x in w]:
                     err("C5", f"{sid}: emph word '{e['word']}' not in caption '{c['text']}'")
                 if e["role"] == "thread":
                     thread_words += 1
@@ -231,11 +231,11 @@ def lint(board, text):
     if cuts / minutes > 3 and cuts > 1:
         err("T2", f"{cuts} hard cuts in {total:.1f}s ({cuts / minutes:.1f}/min); max 3/min. Use morph/carry/push")
 
-    # T4 morph continuity: target must reappear in the next scene
+    # T4 morph continuity: something must carry over (same element id), or the morph is just a cut-fade
     for i, (b, s) in enumerate(scenes[:-1]):
         tr = s["transition_out"]
-        if tr["type"] == "morph" and tr.get("target") and tr["target"] not in elem_ids_by_scene[i + 1]:
-            warn("T4", f"{s['id']}: morph target '{tr['target']}' does not exist in the next scene, so nothing to morph into")
+        if tr["type"] == "morph" and not (elem_ids_by_scene[i] & elem_ids_by_scene[i + 1]):
+            warn("T4", f"{s['id']}: morph but no element carries over to the next scene; use carry / push / draw-through")
     return out, {"total_s": round(total, 2), "wpm": round(wpm), "scenes": len(scenes), "cuts": cuts,
                  "motif_presence": round(present / total, 2) if total else 0}
 

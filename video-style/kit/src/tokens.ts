@@ -29,11 +29,14 @@ export const colorRule = (name: 'max-concept-roles-per-video' | 'max-accent-role
 type StyleName = keyof typeof typeJson.font.style;
 const family = (k: string) => (typeJson.font.family as Record<string, {$value: string}>)[k].$value;
 
-/** CSS for a named text style, scaled to the frame width (tokens are authored at 1080 px). */
-export const textStyle = (name: StyleName, frameWidth: number, sizeName?: keyof typeof typeJson.font.size) => {
+/** Px per token-px: tokens are authored for a frame whose SHORT side is 1080 px (portrait or landscape). */
+export const unit = (width: number, height: number) => Math.min(width, height) / 1080;
+
+/** CSS for a named text style. `short` is the frame's short side (Math.min(width, height)). */
+export const textStyle = (name: StyleName, short: number, sizeName?: keyof typeof typeJson.font.size) => {
 	const s = typeJson.font.style[name] as {family: string; style: string; weight: number; lineHeight: number; letterSpacing: string; decoration?: string};
 	const sizeKey = (sizeName ?? name) as keyof typeof typeJson.font.size;
-	const px = parseFloat(typeJson.font.size[sizeKey].$value) * (frameWidth / 1080);
+	const px = parseFloat(typeJson.font.size[sizeKey].$value) * (short / 1080);
 	return {
 		fontFamily: `"${family(s.family)}"`,
 		fontStyle: s.style,

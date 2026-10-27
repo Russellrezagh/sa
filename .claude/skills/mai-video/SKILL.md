@@ -49,6 +49,17 @@ python3 -I video-style/tools/dialogue.py video-style/storyboards/<id>.yaml   # �
 ```
 Lint and emit the **`.timed.yaml`**. The worked example is `storyboards/the-thread-dialogue.yaml`.
 
+### 2c · Factual videos (papers, data, history): fact ledger first
+Before scripting anything factual, **read the primary sources** (arXiv/alphaXiv tools, web search) and write a `FACTS.md` ledger next to the storyboard. Each row gives a claim, its source (with table or section), and any correction to the brief. Summaries handed to you by users or other models routinely drift: in the worked example, about a third of the dossier's specifics were wrong or inflated. Every on-screen number must also cite its source on screen (charts take a `source` prop; RULES K8).
+
+### 2d · Long-form (≥ 2 min): use a builder, anchors and splits
+- Write the storyboard as a **Python builder** that emits the YAML (see `storyboards/builders/analogy_to_arc.py`). Helpers keep 70–90 scenes readable as a screenplay. Edit the builder, never the generated YAML.
+- Time visual events with **anchors** instead of seconds. `"@1"` is the start of line 1, `"@1:wyz"` is when line 1 says "wyz", `"@1$"` is its end, and `"+0.3"` offsets any of them. `tools/dialogue.py` resolves anchors from the frozen audio, so events stay in sync when lines change.
+- Scenes longer than 10 s (RULES T1) get `split=[k]`. The builder splits them at line *k* and keeps the visuals through a `morph`; past events become state and future events wait for their part.
+- Leave `trans` on `"auto"`. The builder chooses `morph` when an element carries over to the next scene, and `draw-through` otherwise.
+- Landscape (16:9) is the default for long-form; portrait for reels.
+- Preview with `node kit/scripts/stills.mjs <Id> out/stills <frames…>` (one bundle, many frames). Render with `kit/scripts/render_long.sh <Id> out/<dir>`, which works in resumable chunks plus an audio pass, then run `tools/master.py`.
+
 ### 3 · Storyboard → lint (gate)
 Copy `video-style/storyboards/give-it-a-thread.yaml` to `video-style/storyboards/<id>.yaml` and fill it in. Then run:
 ```bash
@@ -97,6 +108,7 @@ Go through the checklist in RULES §9 against the contact sheet. Report to the u
 | `Lens` | `motif.lens@1.0.0` | Alternative primary motif with ripple rings. |
 | `TrackBox` | annotation | Set `props.track: true` on an element. |
 | `Paper` | `texture.paper-grain@1.0.0` | Seeded grain and vignette. |
+| `diagrams/*` | `template.analogy` · `alphabet` · `slipnet` · `thermometer` · `codelets` · `lines` · `bars` · `venn` · `arc` · `rule` · `dimensions` · `citation` · `label` | Data-driven diagrams (props in the storyboard). QA them on `TemplateSheetA/B`. |
 
 To **extend the kit**, add a component that reads only from `tokens.ts` and `determinism.ts`, register its asset in `assetRegistry.ts`, show it on `AssetSheet`, and bump the asset's version.
 

@@ -179,6 +179,24 @@
         "$value": 0.9,
         "$description": "Washes sit on a dark ground, so they need more opacity to keep the same perceived colour."
       }
+    },
+    "data": {
+      "$description": "Data palettes: colours that ARE content (e.g. ARC's 10 cell colours), identical in both modes. Muted ~10% toward paper so they sit in the watercolour world, but each stays distinguishable. Index = ARC integer code.",
+      "arc": {
+        "$type": "color",
+        "$value": [
+          "#1F1D1A",
+          "#2F6FC0",
+          "#D2463B",
+          "#3E9E4A",
+          "#EDC531",
+          "#A3A39E",
+          "#C2479E",
+          "#E5863A",
+          "#7FC3E3",
+          "#7A2333"
+        ]
+      }
     }
   }
 }

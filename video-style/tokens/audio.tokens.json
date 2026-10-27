@@ -51,10 +51,10 @@
     "dialogue": {
       "$description": "Two-voice conversation (guide leads, learner asks). Timings in seconds.",
       "gap-same-speaker-s": 0.15,
-      "gap-turn-s": 0.3,
+      "gap-turn-s": 0.26,
       "extra-after-question-s": 0.3,
-      "scene-lead-in-s": 0.2,
-      "scene-tail-s": 0.45,
+      "scene-lead-in-s": 0.15,
+      "scene-tail-s": 0.3,
       "vo-lufs": -16,
       "guide-share": {
         "min": 0.55,

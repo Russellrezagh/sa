@@ -1,0 +1,41 @@
+{
+  "id": "template.dimensions",
+  "version": "1.0.0",
+  "kind": "template",
+  "status": "published",
+  "title": "Five dimensions",
+  "description": "PotARCin's five uses of one rule as spokes; ✓/✗ marks over time.",
+  "files": [],
+  "implementation": {
+    "kit_component": "diagrams/dimensions",
+    "props": {},
+    "deterministic_inputs": [
+      "element props",
+      "element seed",
+      "local frame"
+    ]
+  },
+  "style": {
+    "roles": [
+      "ink",
+      "concept-5",
+      "concept-3",
+      "thread"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "cadence": "ones"
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27",
+    "reference": "Built for the 'analogy → ARC' explainer (Mitchell et al. papers)"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "diagram"
+  ]
+}

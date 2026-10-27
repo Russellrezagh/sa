@@ -19,12 +19,13 @@ const POSES = ['neutral', 'point', 'shrug'];
 export const AssetSheet: React.FC<{mode: Mode}> = ({mode}) => {
 	ensureFonts();
 	const {width, height} = useVideoConfig();
+	const short = Math.min(width, height);
 	const u = width / 1080;
-	const label = {...textStyle('mono', width), color: color(mode, 'ink-soft')};
+	const label = {...textStyle('mono', short), color: color(mode, 'ink-soft')};
 	return (
 		<AbsoluteFill>
 			<Paper bg={color(mode, 'bg')} shade={color(mode, 'ink-dark')} seed={11} />
-			<div style={{position: 'absolute', left: 64 * u, top: 70 * u, ...textStyle('headline', width), color: color(mode, 'ink')}}>
+			<div style={{position: 'absolute', left: 64 * u, top: 70 * u, ...textStyle('headline', short), color: color(mode, 'ink')}}>
 				MAI asset sheet <span style={{color: color(mode, 'thread')}}>·</span> {mode}
 			</div>
 			{ROLES.map((r, i) => (
@@ -34,15 +35,15 @@ export const AssetSheet: React.FC<{mode: Mode}> = ({mode}) => {
 					<div style={label}>{color(mode, r)}</div>
 				</div>
 			))}
-			<div style={{position: 'absolute', left: 64 * u, top: 530 * u, ...textStyle('caption', width), color: color(mode, 'caption-base')}}>
+			<div style={{position: 'absolute', left: 64 * u, top: 530 * u, ...textStyle('caption', short), color: color(mode, 'caption-base')}}>
 				doing the <span style={{color: color(mode, 'emph')}}>looking</span> <span style={{color: color(mode, 'thread')}}>thread</span>
 			</div>
 			<div style={{position: 'absolute', left: 64 * u, top: 620 * u}}>
-				<div style={{...textStyle('setup', width), color: color(mode, 'ink-soft')}}>the thread that runs through a</div>
-				<div style={{...textStyle('payoff', width), color: color(mode, 'ink')}}>story.</div>
+				<div style={{...textStyle('setup', short), color: color(mode, 'ink-soft')}}>the thread that runs through a</div>
+				<div style={{...textStyle('payoff', short), color: color(mode, 'ink')}}>story.</div>
 			</div>
-			<div style={{position: 'absolute', left: 620 * u, top: 640 * u, ...textStyle('label', width), color: color(mode, 'ink')}}>Inter label 28</div>
-			<div style={{position: 'absolute', left: 620 * u, top: 690 * u, ...textStyle('mono', width), color: color(mode, 'ink')}}>0.37, 0.32 mono</div>
+			<div style={{position: 'absolute', left: 620 * u, top: 640 * u, ...textStyle('label', short), color: color(mode, 'ink')}}>Inter label 28</div>
+			<div style={{position: 'absolute', left: 620 * u, top: 690 * u, ...textStyle('mono', short), color: color(mode, 'ink')}}>0.37, 0.32 mono</div>
 			<div style={{position: 'absolute', left: 620 * u, top: 730 * u, fontFamily: '"Caveat"', fontSize: 44 * u, color: color(mode, 'ink')}}>a little more colour</div>
 			{SHAPES.map((ref, i) => {
 				const a = resolveAsset(ref);

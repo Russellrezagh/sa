@@ -89,10 +89,13 @@ mkdirSync(goldenDir, {recursive: true});
 const boards = {
 	MaiDemo: JSON.parse(readFileSync(join(kit, 'src/storyboards/give-it-a-thread.json'), 'utf8')),
 	MaiDialogue: JSON.parse(readFileSync(join(kit, 'src/storyboards/the-thread-dialogue.json'), 'utf8')),
+	AnalogyToArc: JSON.parse(readFileSync(join(kit, 'src/storyboards/analogy-to-arc.json'), 'utf8')),
 };
-const targets = [['AssetSheetPaper', [0]], ['AssetSheetNight', [0]]];
+// long boards: sample every Nth scene so the check stays fast
+const EVERY = {AnalogyToArc: 4};
+const targets = [['AssetSheetPaper', [0]], ['AssetSheetNight', [0]], ['TemplateSheetA', [0]], ['TemplateSheetB', [0]]];
 for (const [id, board] of Object.entries(boards)) {
-	const frames = board.beats.flatMap((b) => b.scenes).map((s) => s.from + Math.floor(s.frames / 2));
+	const frames = board.beats.flatMap((b) => b.scenes).filter((_, i) => i % (EVERY[id] ?? 1) === 0).map((s) => s.from + Math.floor(s.frames / 2));
 	targets.push([id, [0, ...frames, board.meta.total_frames - 1]]);
 }
 

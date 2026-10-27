@@ -53,6 +53,22 @@ Authoring rules:
 - Features on top of a wash use `ink-dark` (it does not change between modes).
 - Keep each object under ~30 strokes. More detail is a sign it should be two objects.
 
+## 3b. Diagram templates (`template.*`)
+
+Diagrams are assets too: versioned components whose *data* comes from the storyboard. They read only tokens and `determinism.ts`, take anchors for their timed events, and skip entry animations when they carry over between scenes (`persist`).
+
+| Template | For | Key props |
+|---|---|---|
+| `analogy` | letter-string analogies A → B ; C → D | `a b c d dAt groups bonds wall answerRole size` |
+| `alphabet` | a reference list with "next" hops | `tokens name highlight hops` |
+| `slipnet` | concept network with depth, activation, shrinking links, slips | `nodes links activations shrinkAt slips` |
+| `thermometer` · `codelets` | Copycat temperature and agent swarm | `keys [{at, T}] targets` |
+| `lines` · `bars` · `venn` | data (always with `source`) | `cats series upto fromUpto growAt` · `groups legend barsAt` · `a b both note` |
+| `arc` | ARC tasks in colour or digits | `pairs test answer digitsAt bad badNote label` |
+| `rule` | a stated rule with its grade stamp | `who text verdict verdictAt` |
+| `dimensions` | one rule, five uses | `center dims notes marks highlight` |
+| `citation` · `label` | paper cards and free text | `kicker title authors venue` · `text style role size` |
+
 ## 4. Creating an asset (procedure for agents)
 
 1. **Check that it is really missing**: search `assets.lock.json` for the id and its tags.

@@ -38,7 +38,7 @@ Beat types, in order: **HOOK → DEFINE → LADDER → TURN → RULE → RETURN*
 |---|---|
 | **N1** `[lint]` | The first beat is HOOK and the last is RETURN. There is **exactly one TURN** and at least one DEFINE or LADDER. A RULE beat SHOULD exist. |
 | **N2** `[lint]` | The RETURN scene MUST declare `echoes: <hook scene id>` and share a content word with it. The last transition SHOULD be `end-loop`, and the last frame SHOULD match the first frame's composition. |
-| **N3** `[lint]` | Voice pace: **contemplative 115–140 wpm**, **explainer 160–185 wpm**, and never more than 200. Leave ≥ 0.6 s of silence after a question. |
+| **N3** `[lint]` | Voice pace: **contemplative 115–140 wpm**, **explainer 160–185 wpm**, and never more than 200. Pace is measured the way the reference reels were: words over the whole span, pauses included. Leave ≥ 0.6 s of silence after a question. |
 | **N4** `[lint]` | Something visibly changes within **0.5 s** of frame 0, and no stretch longer than **2.5 s** passes without a visible change. |
 | N5 | One idea per video. If the script needs "and also", split it into two videos. |
 | N6 | Target length is 25–60 s (explainer) or ≤ 90 s (contemplative). If the target is longer, LADDER is the beat to cut. |
@@ -79,7 +79,7 @@ The preferred narration is a **two-voice conversation**. The **guide** leads and
 | G9 | **Embodiment:** the learner is the on-stage character (`speakers[].character`). They live on the persistent **cast layer**, walk between per-scene positions (`scene.cast`), and bob while speaking. The guide has **no body: the guide is the thread**, which swells while the guide speaks. The guide "pulls them forward" (Dunkirk reel). |
 | G10 | **Staging:** the learner stands to one side of the stage (x ≈ 0.2–0.3, smaller than the subject), so the subject keeps the optical centre (V9). The learner may leave the stage for the TURN. |
 | G11 | **Casting:** the two voices must contrast in pitch *and* accent, so a listener can tell them apart within one second (default: `voice.joe` as guide, `voice.alba` as learner). Each line is generated once and frozen (D5). Use `say:` for pronunciation; captions always use `text`. |
-| G12 | **Timing:** 0.30 s between speakers, 0.15 s within a speaker, and +0.30 s after any question. Captions follow the frozen audio (speech-only clock); the audio never follows the captions. |
+| G12 | **Timing:** 0.26 s between speakers, 0.15 s within a speaker, and +0.30 s after any question. Captions follow the frozen audio (speech-only clock); the audio never follows the captions. Visual events are anchored to spoken words (`@line:word`), not to hand-typed seconds. |
 
 ## 3. Colour: rules K
 
@@ -92,6 +92,7 @@ The preferred narration is a **two-voice conversation**. The **guide** leads and
 | K5 | Default **paper** mode: warm paper `bg`, ink lines, and one blue thread. **Night** mode belongs to the TURN beat (or to a whole video that is diagram-only). |
 | K6 | Text roles must meet contrast ≥ 3:1 at caption size and ≥ 4.5:1 below 40 px. The token values are tuned so they pass, so do not tint text with opacity. |
 | K7 | Features drawn *on top of* a wash (eyes, pupils) use `ink-dark`, which does not change between modes, so characters look identical in paper and night. |
+| K8 | **Every number on screen cites its source on screen** (chart `source` prop, mono, ink-soft). Data colours that *are* content, such as ARC's ten cell colours, live in `color.data.*` and are the same in both modes. |
 
 ## 4. Typography and captions: rules C
 
@@ -125,10 +126,10 @@ The preferred narration is a **two-voice conversation**. The **guide** leads and
 
 | ID | Rule |
 |---|---|
-| **T1** `[lint]` | Scenes last **1.2–5 s**. |
+| **T1** `[lint]` | Scenes last **1.2–5 s** (up to **10 s** for dialogue scenes, which hold one full guide line plus a reply). |
 | **T2** `[lint]` | Hard cuts are **punctuation**: ≤ 3 per minute, and each one lands on a sound hit. The default transition is continuity. |
 | T3 | The continuity catalogue, in order of preference: `morph` (an element with the same id in consecutive scenes interpolates) · `carry` (the thread pulls the next scene in) · `push` (the camera climbs the ladder) · `zoom-through` (push into a detail until it becomes the next ground) · `draw-through` · `wash` (a circular bleed, used to switch mode). |
-| **T4** `[lint]` | A `morph` or `zoom-through` names a `target` element. For a morph, that element must exist in the next scene too. |
+| **T4** `[lint]` | A `zoom-through` names a `target` element. A `morph` carries over every element whose id appears in both scenes, so at least one must; otherwise use carry, push or draw-through. |
 | T5 | Use the eases from `tokens/motion.tokens.json`: `standard` for morphs and camera, `enter` for arrivals, `exit` for departures, `draw` for strokes and the thread, and springs `settle` and `pop` for payoff words. No linear moves except the pulse and slow drift. |
 | T6 | Every scene has a slow camera push (1.0 → 1.06). Captions and header sit outside the camera and never move with it. |
 | T7 | Durations are tokens in **frames at 30 fps**, converted for other fps. Never hand-tune a duration in code. |
@@ -152,6 +153,7 @@ The preferred narration is a **two-voice conversation**. The **guide** leads and
 | D4 | Published assets are **immutable**. Any visual change means a version bump. `assets.lock.json` holds the sha256 of every file, and CI fails on drift. |
 | D5 | AI-generated images, voices or music are generated **once**, reviewed, frozen into the registry with their full provenance (`tool`, `model`, `prompt`, `seed`), and **never regenerated at render time**. |
 | D6 | Fonts are vendored files (OFL), never CDN links. Toolchain versions are pinned exactly in `kit/package.json`. For pixel-identical renders across machines, render inside one Docker image. |
+| D8 | **Factual videos keep a fact ledger** (`FACTS.md` next to the storyboard): every claim, its primary source and section, and any correction to the brief. Claims that can't be verified are cut or worded qualitatively. Illustrative visuals (made-up grids, example rules) are labelled as such on screen. |
 | D7 | Golden frames: after any change to tokens, assets or the kit, render `AssetSheetPaper`, `AssetSheetNight` and the middle frame of each scene, then compare against the previous output before publishing. |
 
 ## 9. Review checklist (human, against the contact sheet)

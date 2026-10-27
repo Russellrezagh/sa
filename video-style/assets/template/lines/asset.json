@@ -1,0 +1,41 @@
+{
+  "id": "template.lines",
+  "version": "1.0.0",
+  "kind": "template",
+  "status": "published",
+  "title": "Line chart",
+  "description": "Values across ordered conditions; series draw on in turn; prints its source.",
+  "files": [],
+  "implementation": {
+    "kit_component": "diagrams/lines",
+    "props": {},
+    "deterministic_inputs": [
+      "element props",
+      "element seed",
+      "local frame"
+    ]
+  },
+  "style": {
+    "roles": [
+      "ink",
+      "guide",
+      "concept-2",
+      "concept-3"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "cadence": "ones"
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27",
+    "reference": "Built for the 'analogy → ARC' explainer (Mitchell et al. papers)"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "diagram"
+  ]
+}

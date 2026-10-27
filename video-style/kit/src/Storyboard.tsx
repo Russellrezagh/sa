@@ -11,8 +11,9 @@ import {SetupPayoff} from './components/SetupPayoff';
 import {pulsePath, Thread} from './components/Thread';
 import {TrackBox} from './components/TrackBox';
 import {seedFor} from './determinism';
+import {DIAGRAM_COMPONENTS} from './diagrams';
 import {ensureFonts} from './fonts';
-import {camera, color, dialogueMotion, dur, ease, layout, spring as springTok, transitionFrames, type Mode, type Role} from './tokens';
+import {camera, color, dialogueMotion, dur, ease, layout, spring as springTok, transitionFrames, unit, type Mode, type Role} from './tokens';
 import type {Board, Element, Scene} from './types';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
@@ -30,7 +31,7 @@ const threadAt = (board: Board, s: Scene, t: number, w: number, h: number, fps: 
 		case 'strip': {
 			const beat = (t / fps) * (board.meta.pulse.bpm / 60);
 			const blipX = w * (0.1 + 0.8 * (beat % 1));
-			const y = h * ((z.stage.y0 + z.stage.y1) / 2);
+			const y = h * (layout(board.meta.format)['pulse-y'].$value as number);
 			return {d: pulsePath(-0.05 * w, 1.05 * w, y, blipX, h * 0.025), start: 0, end: 1};
 		}
 		case 'home':
@@ -77,10 +78,19 @@ const ElementView: React.FC<{
 		const p = el.props as {setup: string; payoff: string; payoffRole?: Role};
 		return <SetupPayoff setup={p.setup} payoff={p.payoff} payoffRole={p.payoffRole} mode={mode} x={x} y={y} delay={start} />;
 	}
+	if (asset.kind === 'diagram') {
+		const D = DIAGRAM_COMPONENTS[asset.name];
+		const fade = interpolate(zoomOut, [0, 1], [1, 0]);
+		return (
+			<AbsoluteFill style={{opacity: fade}}>
+				<D x={x} y={y} u={sc * unit(width, height)} mode={mode} t={local} fps={fps} seed={seed} persist={!!prev} props={el.props ?? {}} />
+			</AbsoluteFill>
+		);
+	}
 	if (asset.kind !== 'shape') return null;
 
 	const shape = asset.shape(el.pose);
-	const px = (sc * width) / 1080; // px per viewBox unit
+	const px = sc * unit(width, height); // px per viewBox unit
 	let draw = 1;
 	let pop = 1;
 	let opacity = 1;
@@ -96,7 +106,7 @@ const ElementView: React.FC<{
 		<>
 			<InkShape shape={shape} mode={mode} x={x} y={y} scale={px * pop} draw={draw} opacity={opacity * (1 - zoomOut * 0.6)} seed={seed} roleOverride={el.role} />
 			{track ? (
-				<TrackBox x={x} y={y} w={bw} h={bh} mode={mode} frameWidth={width} opacity={interpolate(local, [dur('slow', fps), dur('slow', fps) + dur('quick', fps)], [0, 1], clamp)}
+				<TrackBox x={x} y={y} w={bw} h={bh} mode={mode} short={Math.min(width, height)} opacity={interpolate(local, [dur('slow', fps), dur('slow', fps) + dur('quick', fps)], [0, 1], clamp)}
 					label={`${(el.x ?? 0.5).toFixed(2)}, ${(el.y ?? 0.38).toFixed(2)}`} />
 			) : null}
 		</>
@@ -104,7 +114,7 @@ const ElementView: React.FC<{
 };
 
 /** One scene: stage (with camera push and enter/exit transitions), header, captions, sfx. */
-const SceneView: React.FC<{board: Board; scene: Scene; prevScene?: Scene}> = ({board, scene, prevScene}) => {
+const SceneView: React.FC<{board: Board; scene: Scene; prevScene?: Scene; nextScene?: Scene}> = ({board, scene, prevScene, nextScene}) => {
 	const frame = useCurrentFrame();
 	const {fps, width, height} = useVideoConfig();
 	const mode = sceneMode(board, scene);
@@ -133,6 +143,8 @@ const SceneView: React.FC<{board: Board; scene: Scene; prevScene?: Scene}> = ({b
 		default: fade *= enterP;
 	}
 
+	// morph: elements that continue into the next scene stay; the rest fade during the transition
+	const carried = new Set(scene.transition_out.type === 'morph' ? (nextScene?.elements ?? []).map((e) => e.id) : []);
 	const prevEls = new Map((prevScene?.transition_out.type === 'morph' ? prevScene.elements ?? [] : []).map((e) => [e.id, e]));
 	const zoomTarget = scene.transition_out.type === 'zoom-through' ? scene.transition_out.target : undefined;
 	const zoomP = zoomTarget ? exitP : 0;
@@ -141,12 +153,14 @@ const SceneView: React.FC<{board: Board; scene: Scene; prevScene?: Scene}> = ({b
 		<AbsoluteFill>
 			<AbsoluteFill style={{transform: `translate(${tx}px, ${ty}px) scale(${push})`, opacity: fade, transformOrigin: '50% 38%'}}>
 				{(scene.elements ?? []).map((el) => (
-					<ElementView key={el.id} board={board} scene={scene} el={el} mode={mode} prev={prevEls.get(el.id)} morphFrames={tIn || dur('morph', fps)}
-						zoomOut={el.id === zoomTarget ? zoomP : 0} />
+					<AbsoluteFill key={el.id} style={{opacity: scene.transition_out.type === 'morph' && !carried.has(el.id) ? 1 - exitP : 1}}>
+						<ElementView board={board} scene={scene} el={el} mode={mode} prev={prevEls.get(el.id)} morphFrames={tIn || dur('morph', fps)}
+							zoomOut={el.id === zoomTarget ? zoomP : 0} />
+					</AbsoluteFill>
 				))}
 			</AbsoluteFill>
 			<AbsoluteFill style={{opacity: zoomTarget ? 1 - zoomP : 1}}>
-				<Header text={scene.header} breadcrumb={scene.breadcrumb} mode={mode} y={height * (L.zone.header.y0 + L.zone.header.y1) / 2} marginX={width * L['margin-x'].$value} />
+				<Header text={scene.header} breadcrumb={scene.breadcrumb} mode={mode} still={!!prevScene && prevScene.header === scene.header} y={height * (L.zone.header.y0 + L.zone.header.y1) / 2} marginX={width * L['margin-x'].$value} />
 				{(scene.captions ?? []).map((c, i) => (
 					<Caption key={i} caption={c} mode={mode} y={height * (L.zone.caption.y0 + L.zone.caption.y1) / 2}
 						speakerRole={board.meta.dialogue?.speakers.find((s) => s.id === c.speaker)?.role} />
@@ -219,11 +233,11 @@ export const StoryboardVideo: React.FC<{board: Board}> = ({board}) => {
 					/>
 				</AbsoluteFill>
 			) : null}
-			<Thread d={d} start={start} end={end} color={threadColor} width={(7 * width * swell) / 1080} glow={curMode === 'night' ? threadColor : undefined} />
+			<Thread d={d} start={start} end={end} color={threadColor} width={7 * unit(width, height) * swell} glow={curMode === 'night' ? threadColor : undefined} />
 			<CastLayer board={board} scenes={scenes} idx={idx} t={t} mode={curMode} />
 			{scenes.map((s, i) => (
 				<Sequence key={s.id} from={s.from} durationInFrames={s.frames} name={`${s.beat} · ${s.id}`}>
-					<SceneView board={board} scene={s} prevScene={scenes[i - 1]} />
+					<SceneView board={board} scene={s} prevScene={scenes[i - 1]} nextScene={scenes[i + 1]} />
 				</Sequence>
 			))}
 			{/* bed ≈ 18 LU under the VO (audio.loudness.vo-over-bed-lu) */}

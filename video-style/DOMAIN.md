@@ -66,6 +66,8 @@ Dependencies only point to the right. A storyboard can refer to tokens and asset
 | **Dialogue** | value object | `meta.dialogue {mode, speakers}` | Mode is `curious` or `socratic`. Exactly two speakers. |
 | **Speaker** | entity | `speakers[].id` | Its role is `guide` (leads; embodied by the thread) or `learner` (asks; embodied by a `character.*` on the cast layer). It has a frozen `voice.*` asset. |
 | **Line** | value object | `{speaker, text, say?, emph?}` → timed `{at, until, audio}` | One utterance. It is synthesised once and frozen as `assets/vo/<video>/lines/<speaker>-<hash>.wav`. Captions are verbatim chunks of it. |
+| **Anchor** | value object | `"@<line>[:<word>|$][±s]"` | A time expressed as a spoken moment. Resolved to seconds by `tools/dialogue.py` from the frozen audio; it never appears in a compiled storyboard. |
+| **Fact ledger** | entity | `FACTS.md` beside a storyboard | Claim → primary source → correction. Required for factual videos (RULES D8). |
 | **Cast state** | value object | `scene.cast[speakerId] {pose, x, y, scale}` | Where a speaker's character is during a scene. Characters persist across scenes, like the thread, and walk between states. |
 
 ### Render context

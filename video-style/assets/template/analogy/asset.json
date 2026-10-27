@@ -1,0 +1,42 @@
+{
+  "id": "template.analogy",
+  "version": "1.0.0",
+  "kind": "template",
+  "status": "published",
+  "title": "Analogy",
+  "description": "Copycat letter-string analogy 'A → B ; C → D' as ink-bordered tiles. Changed tiles get a thread-coloured underline (the relation). Props: a, b, c, d, dAt, groups, bonds, wall, size.",
+  "files": [],
+  "implementation": {
+    "kit_component": "diagrams/analogy",
+    "props": {},
+    "deterministic_inputs": [
+      "element props",
+      "element seed",
+      "local frame"
+    ]
+  },
+  "style": {
+    "roles": [
+      "ink",
+      "bg",
+      "thread",
+      "concept-5",
+      "concept-4"
+    ],
+    "modes": [
+      "paper",
+      "night"
+    ],
+    "cadence": "ones"
+  },
+  "provenance": {
+    "source": "hand-made",
+    "author": "MAI style system (Claude Code session)",
+    "created": "2026-10-27",
+    "reference": "Built for the 'analogy → ARC' explainer (Mitchell et al. papers)"
+  },
+  "license": "CC0-1.0",
+  "tags": [
+    "diagram"
+  ]
+}
