@@ -16,7 +16,7 @@ body::before { /* paper grain (static, seeded noise) */
 body.night::before { mix-blend-mode: screen; opacity: calc(var(--grain-opacity) * 0.6); }
 button { font: inherit; color: inherit; }
 
-#app { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100dvh; }
+#app { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
 
 /* ---------------------------------------------------------------- header: title, chapters, the thread */
 header.top { position: relative; display: flex; align-items: baseline; gap: 28px; padding: 16px 32px 18px; }

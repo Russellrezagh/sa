@@ -39,7 +39,7 @@ fs.mkdirSync(outDir, { recursive: true });
   for (let j = 0; j < 5; j++) await page.keyboard.press('ArrowLeft');
   await page.waitForTimeout(600);
   const afterBack = await page.evaluate(() => location.hash);
-  const deep = `${scenes[Math.floor(scenes.length / 2)].id}/1`;
+  const deep = `${scenes[Math.floor(scenes.length / 2)].id}--1`;
   await page.goto(`${url}#${deep}`);
   await page.waitForTimeout(1200);
   const landed = await page.evaluate(() => location.hash);

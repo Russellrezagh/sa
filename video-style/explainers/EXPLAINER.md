@@ -22,7 +22,7 @@ DATA (data.py) ─────────────────────�
 | **Explainer** | aggregate root | `MAI.meta {id, title, description}` plus the cast, cites, chapters and scenes registered by `content.js` | It builds to ONE self-contained HTML file with no network references. The same inputs give the same bytes. |
 | **Chapter** | entity | `{id, nav?, title, beat, mode?}` | `beat` follows the grammar HOOK → DEFINE → LADDER → TURN → RULE → RETURN. Only the TURN chapter is in `mode: 'night'`. Chapters without `nav` fold into the previous navigation label. |
 | **Scene** | entity | `{id, chapter, view, props, title, kicker?, steps[]}` | Exactly one view per scene. A scene change crossfades; a step change animates in place. |
-| **Step** | value object | `{cue, say, cite?, head?}` | **Position is pure.** The stage at step *k* is `fold(cues[0..k])` (a deep merge), so going back, deep-linking (`#scene-id/3`) and replaying all land on the same picture. Adjacent moves animate, and jumps apply instantly. |
+| **Step** | value object | `{cue, say, cite?, head?}` | **Position is pure.** The stage at step *k* is `fold(cues[0..k])` (a deep merge), so going back, deep-linking (`#scene-id--3`) and replaying all land on the same picture. Adjacent moves animate, and jumps apply instantly. |
 | **Cue** | value object | a patch of view state, e.g. `{rows: {tgt: 'lr'}, change: {...}}` | It is plain data with no functions. `null` removes a key. Arrays replace and objects merge. |
 | **Line** | value object | `['mai' \| 'sam', text]` with inline markup `[[role\|text]]`, `**b**`, `*serif*`, `` `code` `` | ≤ 3 per step. The learner speaks ≤ 18 words and the guide ≤ 34. The guide speaks 55–80 % of all words. |
 | **Speaker** | entity | `MAI.cast[id] = {name, role, avatar()}` | Exactly two. The guide *is* the thread (a blue knot); the learner *is* `character.everyperson` (their head is drawn from the asset's shape objects). |
@@ -83,6 +83,7 @@ Every view also takes `notes` (handwritten asides, max one or two at a time). Th
 6. **Build (gate).** The linter runs first and the build stops on any error:
    ```bash
    python3 -I video-style/explainers/build.py <id>          # → explainers/out/<id>.html
+   python3 -I video-style/explainers/build.py <id> --fragment /tmp/<id>.html   # same page without <html>/<head>/<body>, for an Artifact
    ```
 7. **QA (gate).** Run the walk-through, fix every overlap, and re-run:
    ```bash

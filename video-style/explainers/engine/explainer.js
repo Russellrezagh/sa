@@ -149,7 +149,8 @@
   };
 
   function fromHash() {
-    const m = decodeURIComponent(location.hash.slice(1)).match(/^([\w-]+)(?:\/(\d+))?$/);
+    // #scene-id--3 (step 3); the older #scene-id/3 still parses. Plain #name hashes survive every host.
+    const m = decodeURIComponent(location.hash.slice(1)).match(/^([a-z0-9]+(?:-[a-z0-9]+)*)(?:(?:--|\/)(\d+))?$/i);
     if (!m) return null;
     const si = MAI.scenes.findIndex((sc) => sc.id === m[1]);
     if (si < 0) return null;
@@ -220,8 +221,8 @@
     else applyStep(layer, sc, k, fast);
     renderTalk(sc, k, { fast, same });
     renderChrome(sc, k, i);
-    const hash = `#${sc.id}/${k + 1}`;
-    if (location.hash !== hash) history.replaceState(null, '', hash);
+    const hash = `#${sc.id}--${k + 1}`;
+    if (location.hash !== hash) try { history.replaceState(null, '', hash); } catch (e) { /* sandboxed frames may refuse; position still works */ }
   }
   MAI.go = go;
 

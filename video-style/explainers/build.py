@@ -226,6 +226,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("explainer")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--fragment", type=pathlib.Path, help="also write the page without its document wrapper (for hosts that add their own, e.g. Artifacts)")
     args = ap.parse_args()
     xdir = HERE / args.explainer
     ledger = json.loads((xdir / "ledger.json").read_text())
@@ -267,6 +268,12 @@ def main():
     out.parent.mkdir(exist_ok=True)
     out.write_text(html)
     print(f"wrote {out.relative_to(ROOT)}  {len(html.encode()) / 1e6:.2f} MB  sha256 {hashlib.sha256(html.encode()).hexdigest()[:16]}")
+    if args.fragment:
+        body = html.split("<head>\n", 1)[1].replace("</head>\n<body>\n", "", 1).rsplit("</body>", 1)[0]
+        body = re.sub(r'<meta charset="utf-8">\n<meta name="viewport"[^>]*>\n', "", body)
+        frag = f"<title>{doc['meta']['title']}</title>\n" + body.replace(f"<title>{doc['meta']['title']}</title>\n", "", 1)
+        args.fragment.write_text(frag)
+        print(f"wrote fragment {args.fragment}  {len(frag.encode()) / 1e6:.2f} MB")
 
 
 if __name__ == "__main__":
