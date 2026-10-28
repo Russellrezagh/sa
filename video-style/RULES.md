@@ -156,6 +156,9 @@ The preferred narration is a **two-voice conversation**. The **guide** leads and
 | D8 | **Factual videos keep a fact ledger** (`FACTS.md` next to the storyboard): every claim, its primary source and section, and any correction to the brief. Claims that can't be verified are cut or worded qualitatively. Illustrative visuals (made-up grids, example rules) are labelled as such on screen. |
 | D7 | Golden frames: after any change to tokens, assets or the kit, render `AssetSheetPaper`, `AssetSheetNight` and the middle frame of each scene, then compare against the previous output before publishing. |
 
+## 8b. Explainer pages: rules X
+Hand-navigated HTML explainers (no narration) follow every rule above that is not about audio or time, plus X1–X13 in [`explainers/EXPLAINER.md`](explainers/EXPLAINER.md) (`build.py` lints X1–X7).
+
 ## 9. Review checklist (human, against the contact sheet)
 - [ ] Can I say the motif's meaning out loud, and does the thread visibly carry it?
 - [ ] Does each scene *become* the next one (no unexplained jumps)?

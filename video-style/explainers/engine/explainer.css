@@ -1,0 +1,193 @@
+/* MAI explainer: page chrome and shared view styles.
+   Every colour, duration and easing comes from a CSS variable that build.py generates from tokens/*.json. */
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 16px/1.45 "MAI Sans", system-ui, sans-serif;
+  transition: background-color var(--t-breath) var(--e-standard), color var(--t-breath) var(--e-standard);
+  overflow: hidden;
+}
+body::before { /* paper grain (static, seeded noise) */
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50;
+  background-image: var(--grain); opacity: var(--grain-opacity); mix-blend-mode: multiply;
+}
+body.night::before { mix-blend-mode: screen; opacity: calc(var(--grain-opacity) * 0.6); }
+button { font: inherit; color: inherit; }
+
+#app { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100dvh; }
+
+/* ---------------------------------------------------------------- header: title, chapters, the thread */
+header.top { position: relative; display: flex; align-items: baseline; gap: 28px; padding: 16px 32px 18px; }
+.brand { font: italic 23px/1 "MAI Serif", Georgia, serif; white-space: nowrap; }
+.chapters { display: flex; flex-wrap: wrap; gap: 4px 18px; font: 500 11.5px/1.2 "MAI Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+.chapters button { background: none; border: 0; padding: 4px 0; cursor: pointer; color: var(--ink-soft); }
+.chapters button.on { color: var(--thread); }
+.chapters button.done { color: var(--ink); }
+.chapters button:focus-visible, .controls button:focus-visible { outline: 2px solid var(--thread); outline-offset: 3px; }
+svg.thread { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 16px; overflow: visible; }
+svg.thread .track { fill: none; stroke: var(--guide); stroke-width: 1; stroke-dasharray: 2 5; opacity: .7; }
+svg.thread .line { fill: none; stroke: var(--thread); stroke-width: 2.4; stroke-linecap: round;
+  transition: stroke-dashoffset var(--t-slow) var(--e-draw); }
+svg.thread .knot { fill: var(--bg); stroke: var(--thread); stroke-width: 1.6; transition: fill var(--t-base); }
+svg.thread .knot.done { fill: var(--thread); }
+
+/* ---------------------------------------------------------------- the room: stage + conversation */
+main.room { display: grid; grid-template-columns: minmax(0, 1fr) clamp(320px, 27vw, 420px); gap: 28px; padding: 8px 32px 0; min-height: 0; }
+.stage { position: relative; min-height: 0; }
+.layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  transition: opacity var(--t-slow) var(--e-standard), transform var(--t-slow) var(--e-standard); }
+.layer.pre { opacity: 0; transform: translateX(2.5%); }
+.layer.out { opacity: 0; transform: translateX(-2.5%); pointer-events: none; }
+.layer.back.pre { transform: translateX(-2.5%); }
+.layer.back.out { transform: translateX(2.5%); }
+
+.canvas { position: relative; aspect-ratio: 1000 / 620; width: min(100%, calc((100dvh - 200px) * 1000 / 620)); container-type: inline-size; }
+.canvas > svg.view { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.canvas .html { position: absolute; inset: 0; }
+.head { position: absolute; left: 0; top: -1.2cqw; max-width: 70%; font: italic 3.1cqw/1.05 "MAI Serif", Georgia, serif;
+  transition: opacity var(--t-base) var(--e-standard); }
+.head .kicker { display: block; font: 500 1.05cqw/1.4 "MAI Mono", monospace; font-style: normal; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: .5cqw; }
+.cite { position: absolute; left: 0; right: 0; bottom: -2.6cqw; font: 1.05cqw/1.3 "MAI Mono", monospace; color: var(--ink-soft);
+  transition: opacity var(--t-base) var(--e-standard); }
+.cite::before { content: "source · "; color: var(--thread); }
+.fade { opacity: 0; }
+
+/* conversation */
+aside.talk { position: relative; min-height: 0; display: flex; flex-direction: column; }
+.talk .scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 18px 6px 18px 0;
+  mask-image: linear-gradient(transparent 0, #000 9%, #000 100%); scrollbar-width: thin; }
+.talk .scroll::before { content: ""; flex: 1; }
+.scene-title { font: 500 11px/1.3 "MAI Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); padding: 0 0 6px 52px; }
+.line { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 10px; align-items: start;
+  opacity: 0; transform: translateY(10px); transition: opacity var(--t-base) var(--e-enter), transform var(--t-base) var(--e-enter); }
+.line.in { opacity: 1; transform: none; }
+.line.old { opacity: .5; }
+.line .avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--bg-shade); display: grid; place-items: center; overflow: hidden; }
+.line .avatar svg { width: 42px; height: 42px; overflow: visible; }
+.line .who { font: 600 10.5px/1 "MAI Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--who); margin: 3px 0 5px; }
+.line .bubble { border-radius: 4px 14px 14px 14px; padding: 9px 13px 10px; font-size: 16.5px; line-height: 1.42;
+  background: color-mix(in srgb, var(--who) 8%, var(--bg)); border-left: 2.5px solid var(--who); }
+.line.mai { --who: var(--thread); }
+.line.sam { --who: var(--c4); }
+.bubble code { font: .92em "MAI Mono", monospace; background: color-mix(in srgb, var(--ink) 7%, transparent); padding: 0 .25em; border-radius: 3px; }
+.bubble i { font-family: "MAI Serif", Georgia, serif; font-size: 1.12em; }
+.r { font-weight: 600; }
+.r-thread { color: var(--thread); } .r-emph { color: var(--emph); }
+.r-c1 { color: var(--c1); } .r-c2 { color: var(--c2); } .r-c3 { color: var(--c3); } .r-c4 { color: var(--c4); } .r-c5 { color: var(--c5); }
+
+/* ---------------------------------------------------------------- controls */
+footer.controls { display: flex; align-items: center; gap: 14px; padding: 12px 32px 16px; font: 12px/1 "MAI Mono", monospace; color: var(--ink-soft); }
+.controls button.nav { width: 46px; height: 46px; border-radius: 50%; border: 1.5px solid var(--ink); background: transparent; cursor: pointer;
+  display: grid; place-items: center; transition: background-color var(--t-quick), color var(--t-quick), opacity var(--t-quick); }
+.controls button.nav:hover { background: var(--ink); color: var(--bg); }
+.controls button.nav:disabled { opacity: .25; cursor: default; background: transparent; color: var(--ink); }
+.controls button.nav.next { border-color: var(--thread); color: var(--thread); }
+.controls button.nav.next:hover { background: var(--thread); color: var(--bg); }
+.controls .dots { display: flex; gap: 6px; }
+.controls .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--guide); transition: background-color var(--t-base), transform var(--t-base); }
+.controls .dot.done { background: var(--ink-soft); }
+.controls .dot.on { background: var(--thread); transform: scale(1.35); }
+.controls .where { letter-spacing: .06em; }
+.controls .hint { margin-left: auto; }
+.controls kbd { font: inherit; border: 1px solid var(--guide); border-radius: 4px; padding: 1px 5px; }
+
+/* ---------------------------------------------------------------- shared view vocabulary (SVG in a 1000×620 box) */
+svg.view text { font-family: "MAI Sans", system-ui, sans-serif; fill: var(--ink); }
+svg.view .mono { font-family: "MAI Mono", monospace; }
+svg.view .serif { font-family: "MAI Serif", Georgia, serif; font-style: italic; }
+svg.view .hand { font-family: "MAI Hand", cursive; }
+svg.view .soft { fill: var(--ink-soft); }
+svg.view .fx, .canvas .fx { transition: opacity var(--t-morph) var(--e-standard), transform var(--t-morph) var(--e-standard),
+  fill var(--t-base) var(--e-standard), stroke var(--t-base) var(--e-standard), stroke-dashoffset var(--t-slow) var(--e-draw); }
+svg.view .hide, .canvas .hide { opacity: 0 !important; pointer-events: none; }
+svg .ink-line { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+svg .thread-line { fill: none; stroke: var(--thread); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+svg.view .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+svg.view .draw.on { stroke-dashoffset: 0; }
+svg.view .tile rect { fill: var(--highlight); stroke: var(--ink); stroke-width: 2; }
+svg.view .tile text { font-family: "MAI Mono", monospace; font-size: 40px; text-anchor: middle; dominant-baseline: central; }
+body.night svg.view .tile rect { fill: var(--bg-shade); }
+svg.view .tile.hl rect { stroke: var(--thread); stroke-width: 3.5; }
+svg.view .tile.bad rect { stroke: var(--emph); stroke-width: 3.5; }
+svg.view .tile.ghost rect { fill: none; stroke-dasharray: 5 5; stroke: var(--ink-soft); }
+svg.view .tile.ghost text { fill: var(--ink-soft); }
+svg.view .tag { font: 600 13px "MAI Mono", monospace; letter-spacing: .06em; text-transform: uppercase; }
+svg.view .chip rect { fill: var(--bg-shade); }
+svg .r-thread { fill: var(--thread); } svg .r-emph { fill: var(--emph); } svg .r-ink { fill: var(--ink); } svg .r-bg { fill: var(--bg); }
+svg .r-c1 { fill: var(--c1); } svg .r-c2 { fill: var(--c2); } svg .r-c3 { fill: var(--c3); } svg .r-c4 { fill: var(--c4); } svg .r-c5 { fill: var(--c5); }
+svg .r-skin { fill: var(--wash-skin); } svg .r-cloth { fill: var(--wash-cloth); } svg .r-inkdark { fill: var(--ink-dark); } svg .r-guide { fill: var(--guide); }
+svg.view .s-thread { stroke: var(--thread); } svg.view .s-emph { stroke: var(--emph); } svg.view .s-ink { stroke: var(--ink); }
+svg.view .s-c1 { stroke: var(--c1); } svg.view .s-c2 { stroke: var(--c2); } svg.view .s-c3 { stroke: var(--c3); } svg.view .s-c4 { stroke: var(--c4); } svg.view .s-c5 { stroke: var(--c5); }
+svg .wash { mix-blend-mode: multiply; }
+body.night svg .wash { mix-blend-mode: normal; }
+.ink { filter: url(#boil); }
+
+/* ARC grids: the data palette from tokens (color.data.arc) */
+svg.view .cell { stroke: var(--grid-line); stroke-width: 1; }
+svg.view .c0 { fill: var(--arc0); } svg.view .c1 { fill: var(--arc1); } svg.view .c2 { fill: var(--arc2); } svg.view .c3 { fill: var(--arc3); } svg.view .c4 { fill: var(--arc4); }
+svg.view .c5 { fill: var(--arc5); } svg.view .c6 { fill: var(--arc6); } svg.view .c7 { fill: var(--arc7); } svg.view .c8 { fill: var(--arc8); } svg.view .c9 { fill: var(--arc9); }
+svg.view .cmark { fill: none; stroke: var(--emph); stroke-width: 2.4; }
+svg.view .gframe { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+svg.view .digit { font: 500 11px "MAI Mono", monospace; text-anchor: middle; dominant-baseline: central; }
+
+/* clippings: paper figures, scans and photos as quoted objects */
+.clip { position: absolute; margin: 0; background: var(--highlight); padding: .7cqw .7cqw .5cqw; box-shadow: 0 .25cqw 1.2cqw rgba(31, 29, 26, .16);
+  transform-origin: 50% 50%; }
+.clip .frame { position: relative; overflow: hidden; }
+.clip .frame img { display: block; width: 100%; height: auto; transform-origin: 0 0; transition: transform var(--t-slow) var(--e-standard); }
+.clip figcaption { font: .95cqw/1.3 "MAI Mono", monospace; color: var(--ink-soft); margin-top: .45cqw; }
+.clip figcaption b { color: var(--ink); font-weight: 600; }
+body.night .clip figcaption, body.night .clip figcaption b { color: var(--ink-dark); }
+.clip.scan { background: var(--bg); box-shadow: 0 .2cqw .9cqw rgba(31, 29, 26, .12); }
+.clip.scan img { mix-blend-mode: multiply; }
+.clip.photo img { filter: contrast(1.02); }
+.clip::after { /* tape */ content: ""; position: absolute; top: -.7cqw; left: calc(50% - 3cqw); width: 6cqw; height: 1.4cqw;
+  background: color-mix(in srgb, var(--bg-shade) 80%, transparent); transform: rotate(-2deg); box-shadow: 0 0 .2cqw rgba(0,0,0,.08); }
+.clip .mark { position: absolute; border: .28cqw solid var(--thread); border-radius: .6cqw; box-shadow: 0 0 0 100vmax rgba(237, 233, 220, .55);
+  transition: all var(--t-slow) var(--e-standard); }
+body.night .clip .mark { box-shadow: 0 0 0 100vmax rgba(10, 15, 20, .5); }
+.note { position: absolute; font: 2.1cqw/1.1 "MAI Hand", cursive; color: var(--thread); white-space: pre; transform-origin: 0 50%; }
+.note.emph { color: var(--emph); }
+
+/* cards: the generic HTML vocabulary for text objects on the stage */
+.card { position: absolute; background: var(--highlight); border: 1.5px solid var(--ink); border-radius: .9cqw; padding: 1.1cqw 1.3cqw;
+  font-size: 1.45cqw; line-height: 1.35; box-shadow: .35cqw .35cqw 0 color-mix(in srgb, var(--ink) 14%, transparent); }
+.card h3 { margin: 0 0 .4cqw; font: italic 2.1cqw/1.1 "MAI Serif", Georgia, serif; }
+.card .k { display: block; font: 600 .95cqw/1.3 "MAI Mono", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: .3cqw; }
+.card.quote { font: italic 2.05cqw/1.3 "MAI Serif", Georgia, serif; border-color: transparent; background: transparent; box-shadow: none; border-left: .3cqw solid var(--thread); border-radius: 0; }
+.card.quote .k { font-style: normal; }
+.card.code { font: 1.25cqw/1.5 "MAI Mono", monospace; white-space: pre; background: color-mix(in srgb, var(--ink) 4%, var(--highlight)); }
+.card.big { font: italic 5.4cqw/1 "MAI Serif", Georgia, serif; border: 0; background: transparent; box-shadow: none; padding: 0; }
+.card.plain { border: 0; background: transparent; box-shadow: none; padding: 0; }
+.card.stamp { font: 700 1.25cqw/1.2 "MAI Mono", monospace; letter-spacing: .08em; text-transform: uppercase; border-width: .22cqw; border-radius: .5cqw; padding: .5cqw .8cqw; box-shadow: none; background: var(--bg); }
+body.night .card { background: var(--bg-shade); }
+body.night .card.plain, body.night .card.big, body.night .card.quote { background: transparent; }
+.card.hl { border-color: var(--thread); box-shadow: .35cqw .35cqw 0 color-mix(in srgb, var(--thread) 30%, transparent); }
+.card.dim { opacity: .35; }
+.card.role-c1 { border-color: var(--c1); color: var(--c1); } .card.role-c2 { border-color: var(--c2); color: var(--c2); }
+.card.role-c3 { border-color: var(--c3); color: var(--c3); } .card.role-c4 { border-color: var(--c4); color: var(--c4); }
+.card.role-c5 { border-color: var(--c5); color: var(--c5); } .card.role-thread { border-color: var(--thread); color: var(--thread); }
+.card.role-emph { border-color: var(--emph); color: var(--emph); }
+.card .r { font-weight: 600; }
+
+/* ---------------------------------------------------------------- transitions off for jumps; motion off on request */
+.instant, .instant * { transition: none !important; animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 1ms !important; animation: none !important; }
+}
+
+/* ---------------------------------------------------------------- narrow screens: stage on top, conversation below */
+@media (max-width: 900px) {
+  header.top { padding: 10px 16px 14px; gap: 12px; }
+  .brand { display: none; }
+  .chapters { gap: 2px 12px; font-size: 10px; }
+  main.room { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); gap: 4px; padding: 6px 16px 0; }
+  .stage { aspect-ratio: 1000 / 690; }
+  .canvas { width: 100%; }
+  .line .bubble { font-size: 15px; }
+  footer.controls { padding: 8px 16px 12px; }
+  .controls .hint { display: none; }
+  .controls .where { margin-left: auto; }
+}

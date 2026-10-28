@@ -1,6 +1,6 @@
 ---
 name: mai-video
-description: Make a short explainer or essay video in the MAI house style (one persistent thread motif, warm paper with ink and watercolour, semantic colour, continuity transitions, ring structure, two-voice guide/learner dialogue narration) as a deterministic Remotion render. Use when asked to make, script, storyboard, animate or render a video, reel, short or explainer, to add a reference video to the style, or to create a video asset (character pose, icon, sound, texture).
+description: Make a short explainer or essay video in the MAI house style (one persistent thread motif, warm paper with ink and watercolour, semantic colour, continuity transitions, ring structure, two-voice guide/learner dialogue narration) as a deterministic Remotion render, or as a hand-navigated HTML explainer page with no narration. Use when asked to make, script, storyboard, animate or render a video, reel, short, explainer or step-through explainer page, to add a reference video to the style, or to create a video asset (character pose, icon, sound, texture).
 ---
 
 # MAI video skill
@@ -59,6 +59,14 @@ Before scripting anything factual, **read the primary sources** (arXiv/alphaXiv 
 - Leave `trans` on `"auto"`. The builder chooses `morph` when an element carries over to the next scene, and `draw-through` otherwise.
 - Landscape (16:9) is the default for long-form; portrait for reels.
 - Preview with `node kit/scripts/stills.mjs <Id> out/stills <frames…>` (one bundle, many frames). Render with `kit/scripts/render_long.sh <Id> out/<dir>`, which works in resumable chunks plus an audio pass, then run `tools/master.py`.
+
+### 2e · No narration? Make a hand-navigated HTML explainer instead
+When the user wants to *step through* an explanation (no voice, no movie), build a page with `video-style/explainers/` and follow **`video-style/explainers/EXPLAINER.md`**:
+- Model first. Chapters follow the beat grammar; each scene has one view; decide what *moves* on every step before writing lines (X5: the picture changes on every step).
+- Two characters talk in text: Mai (guide, the thread) and Sam (learner, `character.everyperson`). The motion explains and the words name it (X8). **No interactive widgets**: navigation is the only input (X9).
+- Real material beats drawings of it. Use arXiv e-print figures (check the licence on the abs page), Wikimedia Commons (record the author and licence) and Internet Archive scans, all through `media.py` → `ledger.json` with sha256. Photos get the duotone treatment.
+- Anything computed (grids, rule runs) goes in `data.py` with an `assert` per claim.
+- Gates: `python3 -I video-style/explainers/build.py <id>` (lint, then one byte-stable HTML file) and `node video-style/tools/explainer_walk.js <page> <dir>` at 1440×900 and 390×844 (zero errors, no overlaps on the contact sheet).
 
 ### 3 · Storyboard → lint (gate)
 Copy `video-style/storyboards/give-it-a-thread.yaml` to `video-style/storyboards/<id>.yaml` and fill it in. Then run:

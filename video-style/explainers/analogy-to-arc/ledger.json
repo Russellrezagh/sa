@@ -1,0 +1,441 @@
+{
+ "assets": {
+  "memo-slipnet": {
+   "credit": "Hofstadter, “The Copycat Project: An Experiment in Nondeterminism and Creative Analogies”, MIT AI Memo 755 (1984), DTIC ADA142744, p. 18, via the Internet Archive",
+   "file": "media/memo-slipnet.webp",
+   "kind": "scan",
+   "licence": "© 1984 MIT; distribution unlimited (DTIC). Shown for commentary.",
+   "licence_url": "https://archive.org/details/DTIC_ADA142744",
+   "member": "page21:0.05,0.07,0.98,0.93",
+   "sha256": "bc6a326f9c05fb0ceddec3861287a8065bb573d61485c31f5337cd1eb32af535",
+   "size": [
+    900,
+    1072
+   ],
+   "source": "https://archive.org/download/DTIC_ADA142744/DTIC_ADA142744.pdf",
+   "title": "Hofstadter’s hand-drawn Slipnet, memo p. 18",
+   "treatment": "greyscale, autocontrast, toned ink→paper"
+  },
+  "memo-title": {
+   "credit": "Hofstadter, “The Copycat Project: An Experiment in Nondeterminism and Creative Analogies”, MIT AI Memo 755 (1984), DTIC ADA142744, via the Internet Archive",
+   "file": "media/memo-title.webp",
+   "kind": "scan",
+   "licence": "© 1984 MIT; distribution unlimited (DTIC). Shown for commentary.",
+   "licence_url": "https://archive.org/details/DTIC_ADA142744",
+   "member": "page4:0.06,0.07,0.97,0.73",
+   "sha256": "472766442d87f98d645c5d7f51650e2872e1645be0ff7d700ed7aa6bf2f6cb58",
+   "size": [
+    900,
+    841
+   ],
+   "source": "https://archive.org/download/DTIC_ADA142744/DTIC_ADA142744.pdf",
+   "title": "The Copycat Project, MIT AI Memo 755 (January 1984)",
+   "treatment": "greyscale, autocontrast, toned ink→paper"
+  },
+  "p2-item-greek": {
+   "credit": "Stevenson, Pafford, van der Maas & Mitchell, “Can large language models generalize analogy solving like children can?”, TACL 2026 (arXiv:2411.02348), Figure 2b",
+   "file": "media/p2-item-greek.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "images/item1_Greek.jpg",
+   "sha256": "414f87fdd657e8037a96abe274716d0c590609ad3d7e6e408a21a449ceef98a6",
+   "size": [
+    820,
+    397
+   ],
+   "source": "https://arxiv.org/abs/2411.02348",
+   "title": "Item 1: Greek (near transfer)",
+   "treatment": "none (clipping)"
+  },
+  "p2-item-latin": {
+   "credit": "Stevenson, Pafford, van der Maas & Mitchell, “Can large language models generalize analogy solving like children can?”, TACL 2026 (arXiv:2411.02348), Figure 2a",
+   "file": "media/p2-item-latin.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "images/item1_Latin.jpg",
+   "sha256": "542712cc8bc946bed3405bf3a667e51c28c574515ec3e87b98a4824909c96b29",
+   "size": [
+    820,
+    397
+   ],
+   "source": "https://arxiv.org/abs/2411.02348",
+   "title": "Item 1 as shown to participants: Latin",
+   "treatment": "none (clipping)"
+  },
+  "p2-item-symbol": {
+   "credit": "Stevenson, Pafford, van der Maas & Mitchell, “Can large language models generalize analogy solving like children can?”, TACL 2026 (arXiv:2411.02348), Figure 2c",
+   "file": "media/p2-item-symbol.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "images/item1_Symbol.jpg",
+   "sha256": "2262b91f7a576dab80c8743d83766ae2e61fe52e4c6108dbbba730e44d1dc115",
+   "size": [
+    820,
+    397
+   ],
+   "source": "https://arxiv.org/abs/2411.02348",
+   "title": "Item 1: Symbol list (far transfer)",
+   "treatment": "none (clipping)"
+  },
+  "p2-results": {
+   "credit": "Stevenson, Pafford, van der Maas & Mitchell, “Can large language models generalize analogy solving like children can?”, TACL 2026 (arXiv:2411.02348), Figure 1",
+   "file": "media/p2-results.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "images/results_letstr_kids_adults_models.jpg",
+   "sha256": "fed69a8b65ece074253e8a6cdb10b7d5c54dab7b8d23c6c61496a08b1e18e7f4",
+   "size": [
+    601,
+    417
+   ],
+   "source": "https://arxiv.org/abs/2411.02348",
+   "title": "Human vs LLM performance across alphabets",
+   "treatment": "none (clipping)"
+  },
+  "p2-rulecheck": {
+   "credit": "Stevenson, Pafford, van der Maas & Mitchell, “Can large language models generalize analogy solving like children can?”, TACL 2026 (arXiv:2411.02348), Figure 5",
+   "file": "media/p2-rulecheck.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "images/results_rulecheck.jpg",
+   "sha256": "1aab26d1569c0d89b95c63b563968ed466686724b1a7613b8ac7a2518509573a",
+   "size": [
+    601,
+    417
+   ],
+   "source": "https://arxiv.org/abs/2411.02348",
+   "title": "Rule Check task: each rule in isolation",
+   "treatment": "none (clipping)"
+  },
+  "p2-title": {
+   "credit": "Stevenson, Pafford, van der Maas & Mitchell, “Can large language models generalize analogy solving like children can?”, TACL 2026 (arXiv:2411.02348)",
+   "file": "media/p2-title.webp",
+   "kind": "title",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "page1:0.05,0.085,0.95,0.22",
+   "sha256": "1ab5e6e0e0740de9334ad5865f692ddec553858e4a72eac69a72ddeb25d92009",
+   "size": [
+    1000,
+    212
+   ],
+   "source": "https://arxiv.org/pdf/2411.02348v3",
+   "title": "First page of the paper",
+   "treatment": "page-1 crop"
+  },
+  "p3-errors": {
+   "credit": "Beger, Yi, Fu, Denton, Moskvichev, Tsai, Rajamanickam & Mitchell, “Distinguishing Performance From Competence in Evaluations of Humanlike Abstract Reasoning”, NeurIPS 2026 (arXiv:2510.02125), Appendix figure",
+   "file": "media/p3-errors.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/error_types.pdf",
+   "sha256": "0922a76cc01073d556f7e465f5d5d2438fc44438de53256b8ee355ceca8cd104",
+   "size": [
+    1000,
+    695
+   ],
+   "source": "https://arxiv.org/abs/2510.02125",
+   "title": "o3 error types by setting",
+   "treatment": "none (clipping)"
+  },
+  "p3-examples": {
+   "credit": "Beger, Yi, Fu, Denton, Moskvichev, Tsai, Rajamanickam & Mitchell, “Distinguishing Performance From Competence in Evaluations of Humanlike Abstract Reasoning”, NeurIPS 2026 (arXiv:2510.02125), Figure 1",
+   "file": "media/p3-examples.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/ConceptARCExamples.png",
+   "sha256": "c7e206d5a9abee319775786b7f5301dd82035993ef2c51d98be45aa2651a601c",
+   "size": [
+    1400,
+    328
+   ],
+   "source": "https://arxiv.org/abs/2510.02125",
+   "title": "Two ConceptARC tasks",
+   "treatment": "none (clipping)"
+  },
+  "p3-numeric": {
+   "credit": "Beger, Yi, Fu, Denton, Moskvichev, Tsai, Rajamanickam & Mitchell, “Distinguishing Performance From Competence in Evaluations of Humanlike Abstract Reasoning”, NeurIPS 2026 (arXiv:2510.02125), Appendix figure",
+   "file": "media/p3-numeric.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/RuleExample_NumericalEncoding.png",
+   "sha256": "be7269a6c3273012303a881bf8addb380600303d5df096c480738a65033f7528",
+   "size": [
+    1400,
+    533
+   ],
+   "source": "https://arxiv.org/abs/2510.02125",
+   "title": "A correct-unintended rule that exploits colour numbers",
+   "treatment": "none (clipping)"
+  },
+  "p3-rules": {
+   "credit": "Beger, Yi, Fu, Denton, Moskvichev, Tsai, Rajamanickam & Mitchell, “Distinguishing Performance From Competence in Evaluations of Humanlike Abstract Reasoning”, NeurIPS 2026 (arXiv:2510.02125), Figure 2",
+   "file": "media/p3-rules.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/combined_models_cropped.pdf",
+   "sha256": "43e04021028b3384feb99975eb1e11c88af06a56c133b178102512950fd8ac63",
+   "size": [
+    1300,
+    505
+   ],
+   "source": "https://arxiv.org/abs/2510.02125",
+   "title": "Rule evaluations, text vs visual",
+   "treatment": "none (clipping)"
+  },
+  "p3-terms": {
+   "credit": "Beger, Yi, Fu, Denton, Moskvichev, Tsai, Rajamanickam & Mitchell, “Distinguishing Performance From Competence in Evaluations of Humanlike Abstract Reasoning”, NeurIPS 2026 (arXiv:2510.02125), Figure 3",
+   "file": "media/p3-terms.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/PerLLMProportions-WithTools.png",
+   "sha256": "0cf0526630b30fe45efac3bb41084426c00ef72f85e18b9cc4804e5d62e6e6c1",
+   "size": [
+    1100,
+    544
+   ],
+   "source": "https://arxiv.org/abs/2510.02125",
+   "title": "Objectness vs grid-specific words in rules",
+   "treatment": "none (clipping)"
+  },
+  "p3-title": {
+   "credit": "Beger, Yi, Fu, Denton, Moskvichev, Tsai, Rajamanickam & Mitchell, “Distinguishing Performance From Competence in Evaluations of Humanlike Abstract Reasoning”, NeurIPS 2026 (arXiv:2510.02125)",
+   "file": "media/p3-title.webp",
+   "kind": "title",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "page1:0.15,0.105,0.85,0.43",
+   "sha256": "04fa57e10d99d9f531d58a11d3fa0afa3bac298aa7b94e1637a920a59a85084b",
+   "size": [
+    952,
+    572
+   ],
+   "source": "https://arxiv.org/pdf/2510.02125v5",
+   "title": "First page of the paper",
+   "treatment": "page-1 crop"
+  },
+  "p4-flip": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288), Figure 5",
+   "file": "media/p4-flip.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/Color_Flip_examples_v2_cropped.pdf",
+   "sha256": "1181141299a79860a03f689545ad3e42b6848f8127f87b5f6a395bfadd962e9f",
+   "size": [
+    900,
+    382
+   ],
+   "source": "https://arxiv.org/abs/2609.27288",
+   "title": "Corruption: colour flip",
+   "treatment": "none (clipping)"
+  },
+  "p4-human": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288), Figure 4",
+   "file": "media/p4-human.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/H_ARC_examples_v2_cropped.pdf",
+   "sha256": "246936e2faf43748b408f9dce234201de9e1ac58fe73b4174d188e6797c1f55d",
+   "size": [
+    520,
+    557
+   ],
+   "source": "https://arxiv.org/abs/2609.27288",
+   "title": "Corruption: human errors (H-ARC)",
+   "treatment": "none (clipping)"
+  },
+  "p4-mismatch": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288), Figure 4",
+   "file": "media/p4-mismatch.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/Instance_Mismatch_examples_v2_cropped.pdf",
+   "sha256": "b077f07b94004519c6def915ecbe8569470dd7bc6d979a14bdf9150c050f44d2",
+   "size": [
+    520,
+    556
+   ],
+   "source": "https://arxiv.org/abs/2609.27288",
+   "title": "Corruption: instance mismatch",
+   "treatment": "none (clipping)"
+  },
+  "p4-overview": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288), Figure 1",
+   "file": "media/p4-overview.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/PotARCin_Overview_cropped.pdf",
+   "sha256": "e8ab6557a40896f014c7df10a82b4f4818480ace36c2567a78d8103922a57397",
+   "size": [
+    1300,
+    687
+   ],
+   "source": "https://arxiv.org/abs/2609.27288",
+   "title": "The five PotARCin dimensions (task 890034e9)",
+   "treatment": "none (clipping)"
+  },
+  "p4-performance": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288), Figure 2",
+   "file": "media/p4-performance.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/potarcin_performance_v2.pdf",
+   "sha256": "fa6d95940d72362be3b5303975a2c53c201062c4984b9e6c91d4b11413af21f4",
+   "size": [
+    1300,
+    657
+   ],
+   "source": "https://arxiv.org/abs/2609.27288",
+   "title": "Performance on all seven measures",
+   "treatment": "none (clipping)"
+  },
+  "p4-retrieval": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288), Figure 5",
+   "file": "media/p4-retrieval.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/Retrieval_Examples_v2_cropped.pdf",
+   "sha256": "2fcf38ea264519597771bec126d6bdb75ae329f3c449903087fc00a5f7743b0d",
+   "size": [
+    900,
+    383
+   ],
+   "source": "https://arxiv.org/abs/2609.27288",
+   "title": "Corruption: retrieval",
+   "treatment": "none (clipping)"
+  },
+  "p4-sampling": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288), Figure 3",
+   "file": "media/p4-sampling.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/Deep_Investigation_cropped.pdf",
+   "sha256": "2db03609f697bb257c30f445c74e9ec665e306b96c1c1e4235bce43443c766e2",
+   "size": [
+    900,
+    596
+   ],
+   "source": "https://arxiv.org/abs/2609.27288",
+   "title": "More samples, fewer survivors",
+   "treatment": "none (clipping)"
+  },
+  "p4-title": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288)",
+   "file": "media/p4-title.webp",
+   "kind": "title",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "page1:0.15,0.105,0.85,0.325",
+   "sha256": "1ae44239bf0ed616d59d7e80964314cdaa8056f19afbe9ea6950e6f11c57206d",
+   "size": [
+    952,
+    387
+   ],
+   "source": "https://arxiv.org/pdf/2609.27288v2",
+   "title": "First page of the paper",
+   "treatment": "page-1 crop"
+  },
+  "p4-verifier": {
+   "credit": "Beger, Yi & Mitchell, “PotARCin: Multi-Dimensional Evaluation of Skill Acquisition in Abstract Reasoning Tasks”, NeurIPS 2026 (arXiv:2609.27288), Figure 4",
+   "file": "media/p4-verifier.webp",
+   "kind": "figure",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+   "member": "figures/Corrupted_Verifier_Examples_v2_cropped.pdf",
+   "sha256": "95fc089d92d5f87d00d3f5fa5b571d07f7dd9c821555454c981e2e77b50f2eae",
+   "size": [
+    520,
+    557
+   ],
+   "source": "https://arxiv.org/abs/2609.27288",
+   "title": "Corruption: corrupted verifier",
+   "treatment": "none (clipping)"
+  },
+  "photo-hofstadter": {
+   "credit": "Maurizio Codogno, via Wikimedia Commons",
+   "file": "media/photo-hofstadter.webp",
+   "kind": "photo",
+   "licence": "CC BY 2.5",
+   "licence_url": "https://creativecommons.org/licenses/by/2.5/",
+   "member": null,
+   "sha256": "b89ef6a566fe40b8e5e558ae519cf110cf1f99d8c812b2823c01794bc68c3a95",
+   "size": [
+    520,
+    544
+   ],
+   "source": "https://commons.wikimedia.org/wiki/File:Hofstadter2002.jpg",
+   "title": "Douglas Hofstadter, Bologna, 2002",
+   "treatment": "duotone ink→paper"
+  },
+  "photo-mitchell": {
+   "credit": "Xuthoria, via Wikimedia Commons",
+   "file": "media/photo-mitchell.webp",
+   "kind": "photo",
+   "licence": "CC BY-SA 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "member": null,
+   "sha256": "af58eac6b308ad11041ef770f6711edae3153f486d9a6c741240333a97b09837",
+   "size": [
+    520,
+    542
+   ],
+   "source": "https://commons.wikimedia.org/wiki/File:SD_2025_-_Melanie_Mitchell_01_(cropped).jpg",
+   "title": "Melanie Mitchell, San Diego, 2025",
+   "treatment": "duotone ink→paper"
+  }
+ },
+ "fonts": {
+  "hand": {
+   "file": "media/font-hand.woff2",
+   "licence": "OFL-1.1",
+   "sha256": "c61e1a1578265ce599d392b669c7fdf91950aa7c71b2d6adc002029a7565594c",
+   "source": "assets/font/caveat/Caveat-Variable.ttf",
+   "unicodes": "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DC,U+0370-03FF,U+2010-2027,U+2030-205E,U+2190-21FF,U+2200-22FF,U+2300-23FF,U+25A0-25FF,U+2713-2717"
+  },
+  "inter": {
+   "file": "media/font-inter.woff2",
+   "licence": "OFL-1.1",
+   "sha256": "2adb0a5a48f29458c9f07e374625de4891d87a0c0d013c208f16af755198257f",
+   "source": "assets/font/inter/Inter-Variable.ttf",
+   "unicodes": "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DC,U+0370-03FF,U+2010-2027,U+2030-205E,U+2190-21FF,U+2200-22FF,U+2300-23FF,U+25A0-25FF,U+2713-2717"
+  },
+  "mono": {
+   "file": "media/font-mono.woff2",
+   "licence": "OFL-1.1",
+   "sha256": "f886b22dbb54d1a734fc25d161e1d16209f2ceac1657ff43a5c5132fd1751e66",
+   "source": "assets/font/jetbrains-mono/JetBrainsMono-Variable.ttf",
+   "unicodes": "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DC,U+0370-03FF,U+2010-2027,U+2030-205E,U+2190-21FF,U+2200-22FF,U+2300-23FF,U+25A0-25FF,U+2713-2717"
+  },
+  "serif": {
+   "file": "media/font-serif.woff2",
+   "licence": "OFL-1.1",
+   "sha256": "ebf30768bfcad0c28a04dc8e9310b0c7d22146a3e4e466dbd6edfaf6d8daaeb6",
+   "source": "assets/font/instrument-serif/InstrumentSerif-Regular.ttf",
+   "unicodes": "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DC,U+0370-03FF,U+2010-2027,U+2030-205E,U+2190-21FF,U+2200-22FF,U+2300-23FF,U+25A0-25FF,U+2713-2717"
+  },
+  "serif-italic": {
+   "file": "media/font-serif-italic.woff2",
+   "licence": "OFL-1.1",
+   "sha256": "4b8663cd44d8de3ba75a221f19838ae389f7264207478f779e2dbd6b5c3d280c",
+   "source": "assets/font/instrument-serif/InstrumentSerif-Italic.ttf",
+   "unicodes": "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DC,U+0370-03FF,U+2010-2027,U+2030-205E,U+2190-21FF,U+2200-22FF,U+2300-23FF,U+25A0-25FF,U+2713-2717"
+  }
+ }
+}

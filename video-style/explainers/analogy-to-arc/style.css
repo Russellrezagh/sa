@@ -1,0 +1,10 @@
+/* Explainer-specific motion: unhappiness wobbles on twos (house rule: drawn things move on twos), and
+   Slipnet activation flares (shallow concepts) or lingers (deep ones). Base styles are the END states, so a
+   jump with animations off still lands on the right picture. */
+svg.view .tile.wobble { animation: wobble 0.34s steps(2, jump-none) infinite; transform-box: fill-box; }
+@keyframes wobble { 0% { rotate: -2.5deg; } 100% { rotate: 2.5deg; } }
+svg.view .halo { transition: opacity var(--t-slow) var(--e-standard); }
+svg.view .halo.flare { animation: flare 1.8s var(--e-standard) 1 both; }
+@keyframes flare { 0% { opacity: 0; } 12% { opacity: .55; } 100% { opacity: 0; } }
+svg.view .halo.linger { animation: linger 2.4s var(--e-enter) 1 both; }
+@keyframes linger { 0% { opacity: 0; } 60% { opacity: .05; } 100% { opacity: .32; } }

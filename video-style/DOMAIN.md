@@ -23,6 +23,8 @@ Read this before writing any video code. It names the things that exist in this 
    tokens/*.json         assets/registry.json   storyboards/*.yaml      kit/ (Remotion)
 ```
 
+A fifth context, **PAGE**, renders the same story as a hand-navigated HTML explainer with no narration (Explainer → Chapter → Scene → Step → Cue + Lines; the stage at a step is the fold of its cues). It reads tokens and assets exactly like RENDER does. See `explainers/EXPLAINER.md`.
+
 Dependencies only point to the right. A storyboard can refer to tokens and assets. Tokens and assets never refer to a storyboard. The renderer reads all three and may not invent anything that is missing from them. That one-way flow is what keeps the system deterministic.
 
 ---
