@@ -502,9 +502,9 @@ p3.append(S("p3-example", [
       emph=[("Gemini", "concept-3")]),
     L(SAM, "But colour numbers are just labels!"),
     L(G, "Exactly. A pattern that exists only because colours became numbers."),
-], [E("r1", "template.rule", 0.33, 0.42, 0.75, who="human · ConceptARC study", text="Simply remove the top object and the bottom object only.", verdict="correct-intended",
+], [E("r1", "template.rule", 0.31, 0.42, 0.9, w=820, who="human · ConceptARC study", text="Simply remove the top object and the bottom object only.", verdict="correct-intended",
       verdictAt="@0:person", quoteStyle="serif"),
-    E("r2", "template.rule", 0.75, 0.42, 0.75, who="Gemini 2.5 Pro · text, medium effort", at="@0:Gemini",
+    E("r2", "template.rule", 0.76, 0.42, 0.9, w=820, who="Gemini 2.5 Pro · text, medium effort", at="@0:Gemini",
       text="Sort these shapes by size, then by color value as a tie-breaker. Remove the two shapes that come first.", verdict="correct-unintended", verdictAt="@1")],
     header="a shortcut", notes="Rule texts abridged from Beger et al. (2026), §3 (Figure 1 discussion).", split=[1]))
 p3.append(S("p3-words", [
@@ -630,7 +630,7 @@ p4.append(S("p4-parc", [
 ], [p4bars(P4_PARC, P4PSRC, at="@1:Passing")], header="Paper 4 · P-ARC (never seen)"))
 p4.append(S("p4-joke", [
     L(SAM, "So it's a Potemkin village with a leaderboard."),
-], [p4bars(P4_PARC, P4PSRC, at=0), E("facade", "icon.facade", 0.88, 0.2, 0.6, enter="draw", at="@0:Potemkin")],
+], [p4bars(P4_PARC, P4PSRC, at=0), E("facade", "icon.facade", 0.86, 0.36, 0.6, enter="draw", at="@0:Potemkin")],
     header="Paper 4 · P-ARC (never seen)", pose="shrug", trans="carry"))
 beats.append(("potarcin", "LADDER", p4))
 

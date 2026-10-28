@@ -27,6 +27,20 @@ export const Lines: React.FC<DiagramProps> = (d) => {
 	const px = (i: number) => left + (W * (i + 0.5)) / p.cats.length;
 	const py = (v: number) => top + H * (1 - v / yMax);
 	const axis = ramp(d, 0, 12, 'draw');
+	// series-name labels sit at each line's current end; push them apart so they never overlap
+	const labelY = (() => {
+		const upto = p.upto ?? p.cats.length;
+		const from = p.fromUpto ?? 0;
+		const ends = p.series.map((s, k) => {
+			const sp = from > 0 ? rampAt(d, p.growAt ?? 0.2, 22, 'draw') : rampAt(d, p.seriesAt?.[k] ?? 0.4 + k * 0.5, 22, 'draw');
+			const n = Math.max(1, Math.min(s.values.length, Math.floor(Math.max(1, from + (upto - from) * sp))));
+			return {k, y: py(s.values[n - 1]) + 8 * u};
+		});
+		const gap = 30 * u;
+		const sorted = [...ends].sort((a, b) => a.y - b.y);
+		for (let i = 1; i < sorted.length; i++) sorted[i].y = Math.max(sorted[i].y, sorted[i - 1].y + gap);
+		return new Map(sorted.map((e) => [e.k, e.y]));
+	})();
 	return (
 		<svg width="100%" height="100%" style={{position: 'absolute', inset: 0, overflow: 'visible'}}>
 			<g opacity={axis}>
@@ -66,7 +80,7 @@ export const Lines: React.FC<DiagramProps> = (d) => {
 								{p.showValues ? <text x={a + 14 * u} y={b - 12 * u} style={mono(19 * u)} fill={c}>{s.values[i].toFixed(2)}</text> : null}
 							</g>
 						))}
-						<text x={last[0] + 24 * u} y={last[1] + 8 * u + (s.labelDy ?? 0) * u} style={sans(26 * u, 600)} fill={c} opacity={Math.min(1, visible / Math.max(1, upto))}>{s.name}</text>
+						<text x={last[0] + 24 * u} y={labelY.get(k) ?? last[1]} style={sans(26 * u, 600)} fill={c} opacity={Math.min(1, visible / Math.max(1, upto))}>{s.name}</text>
 					</g>
 				);
 			})}

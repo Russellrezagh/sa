@@ -28,7 +28,9 @@ def measure(path):
 
 def encode(linear):
     af = (f"loudnorm=I={I}:TP={TP_ENC}:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
-          f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear={'true' if linear else 'false'},aresample=48000")
+          f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear={'true' if linear else 'false'},aresample=48000,"
+          # AAC overshoots the true peak by ~0.7 dB, so limit with headroom below the ceiling
+          f"alimiter=limit={10 ** ((TP - 1.5) / 20):.4f}:attack=5:release=60:level=false")
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-c:v", "copy", "-af", af, "-c:a", "aac", "-b:a", "192k",
                     "-movflags", "+faststart", str(dst)], check=True)
     return measure(dst)
@@ -37,7 +39,7 @@ def encode(linear):
 m = measure(src)
 c = encode(linear=True)
 mode = "linear gain"
-if abs(float(c["input_i"]) - I) > 1.0:  # peaks too spiky for a pure gain: let loudnorm limit
+if abs(float(c["input_i"]) - I) > 1.0 or float(c["input_tp"]) > TP:  # off target, or the encoder overshot the ceiling: let loudnorm limit
     c = encode(linear=False)
     mode = "dynamic (limited)"
 print(f"{dst}: {m['input_i']} → {c['input_i']} LUFS, true peak {c['input_tp']} dBTP [{mode}]")

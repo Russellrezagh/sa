@@ -21,7 +21,7 @@ while [ $start -lt $total ]; do
 done
 if [ ! -s "$out/audio.wav" ]; then
   echo "[$(date +%T)] audio"
-  npx remotion render "$id" "$out/audio.wav.tmp.wav" --codec=wav --concurrency=4 $BX > "$out/audio.log" 2>&1
+  MAI_AUDIO_ONLY=1 npx remotion render "$id" "$out/audio.wav.tmp.wav" --codec=wav --concurrency=4 $BX > "$out/audio.log" 2>&1
   mv "$out/audio.wav.tmp.wav" "$out/audio.wav"
 fi
 ffmpeg -v error -y -f concat -safe 0 -i "$out/chunks.txt" -i "$out/audio.wav" -map 0:v -map 1:a -c:v copy -c:a aac -b:a 192k -shortest -movflags +faststart "$out/$id.mp4"

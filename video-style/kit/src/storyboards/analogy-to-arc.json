@@ -8344,10 +8344,11 @@
       {
        "id": "r1",
        "asset": "template.rule@1.0.0",
-       "x": 0.33,
+       "x": 0.31,
        "y": 0.42,
-       "scale": 0.75,
+       "scale": 0.9,
        "props": {
+        "w": 820,
         "who": "human · ConceptARC study",
         "text": "Simply remove the top object and the bottom object only.",
         "verdict": "correct-intended",
@@ -8358,11 +8359,12 @@
       {
        "id": "r2",
        "asset": "template.rule@1.0.0",
-       "x": 0.75,
+       "x": 0.76,
        "y": 0.42,
-       "scale": 0.75,
+       "scale": 0.9,
        "at": 3.8,
        "props": {
+        "w": 820,
         "who": "Gemini 2.5 Pro · text, medium effort",
         "text": "Sort these shapes by size, then by color value as a tie-breaker. Remove the two shapes that come first.",
         "verdict": "correct-unintended",
@@ -8471,10 +8473,11 @@
       {
        "id": "r1",
        "asset": "template.rule@1.0.0",
-       "x": 0.33,
+       "x": 0.31,
        "y": 0.42,
-       "scale": 0.75,
+       "scale": 0.9,
        "props": {
+        "w": 820,
         "who": "human · ConceptARC study",
         "text": "Simply remove the top object and the bottom object only.",
         "verdict": "correct-intended",
@@ -8485,11 +8488,12 @@
       {
        "id": "r2",
        "asset": "template.rule@1.0.0",
-       "x": 0.75,
+       "x": 0.76,
        "y": 0.42,
-       "scale": 0.75,
+       "scale": 0.9,
        "at": 0,
        "props": {
+        "w": 820,
         "who": "Gemini 2.5 Pro · text, medium effort",
         "text": "Sort these shapes by size, then by color value as a tie-breaker. Remove the two shapes that come first.",
         "verdict": "correct-unintended",
@@ -12054,8 +12058,8 @@
       {
        "id": "facade",
        "asset": "icon.facade@1.0.0",
-       "x": 0.88,
-       "y": 0.2,
+       "x": 0.86,
+       "y": 0.36,
        "scale": 0.6,
        "at": 0.65,
        "enter": "draw"
